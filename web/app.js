@@ -74,16 +74,24 @@ function renderDropdown(dropdownEl, matches, side) {
 }
 
 // ─── Select Pokemon ──────────────────────────────────
+function renderTypeBadges(name) {
+  const types = POKEMON_TYPES[name] || [];
+  return types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
+}
+
 function selectPokemon(name, side) {
   state[side].pokemon = name;
   const iconEl = side === 'a' ? els.iconA : els.iconB;
   const nameEl = side === 'a' ? els.nameA : els.nameB;
+  const typesEl = side === 'a' ? document.getElementById('types-a') : document.getElementById('types-b');
   const spriteUrl = getSpriteUrl(name);
+  const fallbackUrl = getSpriteFallbackUrl(name);
 
   iconEl.innerHTML = `<img src="${spriteUrl}" alt="${name}"
-    onerror="this.src=''; this.parentElement.innerHTML='<div class=\'poke-placeholder\'>${name[0].toUpperCase()}</div>'"
+    onerror="this.onerror=null; this.src='${fallbackUrl}'; this.onerror=function(){this.parentElement.innerHTML='<div class=\poke-placeholder\>${name[0].toUpperCase()}</div>';};"
   >`;
   nameEl.textContent = name;
+  if (typesEl) typesEl.innerHTML = renderTypeBadges(name);
 
   updateSpeed(side);
   renderTiers();

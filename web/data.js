@@ -1122,23 +1122,23 @@ function getSpeed(name, boost, evs) {
 }
 
 // Pokemon sprite URL (Pokémon Showdown sprites)
+// Falls back from /sprites/ani/ (animated) to /sprites/dex/ (static) via onerror in HTML
 function getSpriteUrl(name) {
   const n = name.trim();
 
   // Paldean Tauros: random between the 3 forms
   if (n === 'Paldean Tauros') {
     const forms = ['tauros-paldeacombat', 'tauros-paldeaaqua', 'tauros-paldeablaze'];
-    return `https://play.pokemonshowdown.com/sprites/ani/${forms[Math.floor(Math.random() * forms.length)]}.gif`;
+    return 'https://play.pokemonshowdown.com/sprites/ani/' + forms[Math.floor(Math.random() * forms.length)] + '.gif';
   }
 
-  // Detect prefix and whether it's a Mega
   const isMega     = /^Mega /i.test(n);
   const isAlolan   = /^Alolan /i.test(n);
   const isGalarian = /^Galarian /i.test(n);
   const isHisuian  = /^Hisuian /i.test(n);
   const isPaldean  = /^Paldean /i.test(n);
 
-  // Strip the regional/mega prefix to get the base name
+  // Strip regional/form prefix to get base name
   let base = n
     .replace(/^Mega /i, '')
     .replace(/^Alolan /i, '')
@@ -1146,25 +1146,104 @@ function getSpriteUrl(name) {
     .replace(/^Hisuian /i, '')
     .replace(/^Paldean /i, '');
 
-  // Slugify base name: lowercase, remove punctuation, spaces → hyphens
-  let slug = base
-    .toLowerCase()
-    .replace(/['.:\u200b-\u200d]/g, '')  // remove apostrophes, dots, zero-width chars
-    .replace(/\s+/g, '-');
+  // Slugify: lowercase, remove punctuation, spaces to hyphens
+  let slug = base.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
 
-  // Append the correct suffix
   if (isMega) {
-    // Mega Charizard X/Y: charizard-mega-x / charizard-mega-y
-    if (/^charizard-[xy]$/.test(slug)) {
-      slug = 'charizard-mega-' + slug.slice(-1);
-    } else {
-      slug = slug + '-mega';
-    }
+    // Showdown: charizard-megax / charizard-megay (no hyphen before letter)
+    if (slug === 'charizard-x') slug = 'charizard-megax';
+    else if (slug === 'charizard-y') slug = 'charizard-megay';
+    else slug = slug + '-mega';
   }
   if (isAlolan)   slug = slug + '-alola';
   if (isGalarian) slug = slug + '-galar';
   if (isHisuian)  slug = slug + '-hisui';
   if (isPaldean)  slug = slug + '-paldea';
 
-  return `https://play.pokemonshowdown.com/sprites/ani/${slug}.gif`;
+  return 'https://play.pokemonshowdown.com/sprites/ani/' + slug + '.gif';
 }
+
+// Static fallback sprite (broader coverage for custom Megas)
+function getSpriteFallbackUrl(name) {
+  return getSpriteUrl(name).replace('/sprites/ani/', '/sprites/dex/').replace('.gif', '.png');
+}
+
+
+// ─── Pokémon Types ───────────────────────────────────
+const POKEMON_TYPES = {
+  "Abomasnow": ["grass","ice"], "Absol": ["dark"], "Aegislash": ["steel","ghost"],
+  "Aerodactyl": ["rock","flying"], "Alakazam": ["psychic"], "Alolan Ninetales": ["ice","fairy"],
+  "Alolan Raichu": ["electric","psychic"], "Ampharos": ["electric"], "Araquanid": ["water","bug"],
+  "Arcanine": ["fire"], "Archaludon": ["steel","dragon"], "Armarouge": ["fire","psychic"],
+  "Audino": ["normal"], "Aurorus": ["rock","ice"], "Azumarill": ["water","fairy"],
+  "Banette": ["ghost"], "Basculegion": ["water","ghost"], "Beartic": ["ice"],
+  "Bellibolt": ["electric"], "Blastoise": ["water"], "Ceruledge": ["fire","ghost"],
+  "Chandelure": ["ghost","fire"], "Charizard": ["fire","flying"], "Chesnaught": ["grass","fighting"],
+  "Chimecho": ["psychic"], "Clefable": ["fairy"], "Cofagrigus": ["ghost"],
+  "Conkeldurr": ["fighting"], "Corviknight": ["flying","steel"], "Crabominable": ["fighting","ice"],
+  "Decidueye": ["grass","ghost"], "Delphox": ["fire","psychic"], "Diggersby": ["normal","ground"],
+  "Dragapult": ["dragon","ghost"], "Dragonite": ["dragon","flying"], "Drampa": ["normal","dragon"],
+  "Emboar": ["fire","fighting"], "Empoleon": ["water","steel"], "Espathra": ["psychic"],
+  "Espeon": ["psychic"], "Excadrill": ["ground","steel"], "Feraligatr": ["water"],
+  "Flapple": ["grass","dragon"], "Florges": ["fairy"], "Forretress": ["bug","steel"],
+  "Froslass": ["ice","ghost"], "Galarian Slowbro": ["poison","psychic"], "Galarian Slowking": ["poison","psychic"],
+  "Gallade": ["psychic","fighting"], "Garbodor": ["poison"], "Garchomp": ["dragon","ground"],
+  "Gardevoir": ["psychic","fairy"], "Garganacl": ["rock"], "Gengar": ["ghost","poison"],
+  "Glalie": ["ice"], "Glimmora": ["rock","poison"], "Gliscor": ["ground","flying"],
+  "Golurk": ["ground","ghost"], "Goodra": ["dragon"], "Gourgeist": ["ghost","grass"],
+  "Gourgeist-Large": ["ghost","grass"], "Gourgeist-Small": ["ghost","grass"], "Gourgeist-Super": ["ghost","grass"],
+  "Greninja": ["water","dark"], "Gyarados": ["water","flying"], "Hatterene": ["psychic","fairy"],
+  "Hawlucha": ["fighting","flying"], "Heliolisk": ["electric","normal"], "Heracross": ["bug","fighting"],
+  "Hippowdon": ["ground"], "Hisuian Arcanine": ["fire","rock"], "Hisuian Avalugg": ["ice","rock"],
+  "Hisuian Decidueye": ["grass","fighting"], "Hisuian Goodra": ["steel","dragon"], "Hisuian Samurott": ["water","dark"],
+  "Hisuian Typhlosion": ["fire","ghost"], "Hisuian Zoroark": ["normal","ghost"],
+  "Houndoom": ["dark","fire"], "Hydrapple": ["grass","dragon"], "Hydreigon": ["dark","dragon"],
+  "Incineroar": ["fire","dark"], "Infernape": ["fire","fighting"], "Jolteon": ["electric"],
+  "Kangaskhan": ["normal"], "Kingambit": ["dark","steel"], "Kleavor": ["bug","rock"],
+  "Klefki": ["steel","fairy"], "Kommo-o": ["dragon","fighting"], "Krookodile": ["ground","dark"],
+  "Lopunny": ["normal"], "Lucario": ["fighting","steel"], "Lycanroc-Dusk": ["rock"],
+  "Lycanroc-Midday": ["rock"], "Machamp": ["fighting"], "Mamoswine": ["ice","ground"],
+  "Manectric": ["electric"], "Maushold": ["normal"], "Medicham": ["fighting","psychic"],
+  "Mega Abomasnow": ["grass","ice"], "Mega Absol": ["dark"], "Mega Aerodactyl": ["rock","flying"],
+  "Mega Aggron": ["steel"], "Mega Alakazam": ["psychic"], "Mega Altaria": ["dragon","fairy"],
+  "Mega Ampharos": ["electric","dragon"], "Mega Audino": ["normal","fairy"], "Mega Banette": ["ghost"],
+  "Mega Beedrill": ["bug","poison"], "Mega Blastoise": ["water"], "Mega Camerupt": ["fire","ground"],
+  "Mega Chandelure": ["ghost","fire"], "Mega Charizard X": ["fire","dragon"], "Mega Charizard Y": ["fire","flying"],
+  "Mega Chesnaught": ["grass","fighting"], "Mega Chimecho": ["psychic"], "Mega Clefable": ["fairy"],
+  "Mega Crabominable": ["fighting","ice"], "Mega Delphox": ["fire","psychic"], "Mega Dragonite": ["dragon","flying"],
+  "Mega Drampa": ["normal","dragon"], "Mega Emboar": ["fire","fighting"], "Mega Excadrill": ["ground","steel"],
+  "Mega Feraligatr": ["water"], "Mega Floette": ["fairy"], "Mega Froslass": ["ice","ghost"],
+  "Mega Gallade": ["psychic","fighting"], "Mega Garchomp": ["dragon","ground"], "Mega Gardevoir": ["psychic","fairy"],
+  "Mega Gengar": ["ghost","poison"], "Mega Glalie": ["ice"], "Mega Glimmora": ["rock","poison"],
+  "Mega Golurk": ["ground","ghost"], "Mega Greninja": ["water","dark"], "Mega Gyarados": ["water","dark"],
+  "Mega Hawlucha": ["fighting","flying"], "Mega Heracross": ["bug","fighting"], "Mega Houndoom": ["dark","fire"],
+  "Mega Kangaskhan": ["normal"], "Mega Lopunny": ["normal","fighting"], "Mega Lucario": ["fighting","steel"],
+  "Mega Manectric": ["electric"], "Mega Medicham": ["fighting","psychic"], "Mega Meganium": ["grass"],
+  "Mega Meowstic": ["psychic"], "Mega Pidgeot": ["normal","flying"], "Mega Pinsir": ["bug","flying"],
+  "Mega Sableye": ["dark","ghost"], "Mega Scizor": ["bug","steel"], "Mega Scovillain": ["grass","fire"],
+  "Mega Sharpedo": ["water","dark"], "Mega Skarmory": ["steel","flying"], "Mega Slowbro": ["water","psychic"],
+  "Mega Starmie": ["water","psychic"], "Mega Steelix": ["steel","ground"], "Mega Tyranitar": ["rock","dark"],
+  "Mega Venusaur": ["grass","poison"], "Mega Victreebel": ["grass","poison"],
+  "Meganium": ["grass"], "Meowscarada": ["grass","dark"], "Meowstic": ["psychic"],
+  "Milotic": ["water"], "Mimikyu": ["ghost","fairy"], "Morpeko": ["electric","dark"],
+  "Mr. Rime": ["ice","psychic"], "Mudsdale": ["ground"], "Ninetales": ["fire"],
+  "Noivern": ["flying","dragon"], "Orthworm": ["steel"], "Palafin": ["water"],
+  "Paldean Tauros": ["fighting","water"], "Pangoro": ["fighting","dark"], "Pelipper": ["water","flying"],
+  "Pidgeot": ["normal","flying"], "Pikachu": ["electric"], "Pinsir": ["bug"],
+  "Politoed": ["water"], "Polteageist": ["ghost"], "Primarina": ["water","fairy"],
+  "Quaquaval": ["water","fighting"], "Raichu": ["electric"], "Reuniclus": ["psychic"],
+  "Rhyperior": ["ground","rock"], "Roserade": ["grass","poison"], "Rotom-Wash": ["electric","water"],
+  "Sableye": ["dark","ghost"], "Salazzle": ["poison","fire"], "Sandaconda": ["ground"],
+  "Scizor": ["bug","steel"], "Scovillain": ["grass","fire"], "Serperior": ["grass"],
+  "Sharpedo": ["water","dark"], "Sinistcha": ["grass","ghost"], "Skarmory": ["steel","flying"],
+  "Skeledirge": ["fire","ghost"], "Slowbro": ["water","psychic"], "Slowking": ["water","psychic"],
+  "Slurpuff": ["fairy"], "Sneasler": ["poison","fighting"], "Snorlax": ["normal"],
+  "Starmie": ["water","psychic"], "Sylveon": ["fairy"], "Talonflame": ["fire","flying"],
+  "Tauros": ["normal"], "Tinkaton": ["fairy","steel"], "Torkoal": ["fire"],
+  "Torterra": ["grass","ground"], "Toxapex": ["poison","water"], "Trevenant": ["ghost","grass"],
+  "Tsareena": ["grass"], "Typhlosion": ["fire"], "Tyranitar": ["rock","dark"],
+  "Tyrantrum": ["rock","dragon"], "Umbreon": ["dark"], "Vanilluxe": ["ice"],
+  "Vaporeon": ["water"], "Venusaur": ["grass","poison"], "Victreebel": ["grass","poison"],
+  "Volcarona": ["bug","fire"], "Weavile": ["dark","ice"], "Whimsicott": ["grass","fairy"],
+  "Zoroark": ["dark"],
+};

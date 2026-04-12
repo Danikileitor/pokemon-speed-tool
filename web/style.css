@@ -616,3 +616,103 @@ main {
     width: 60px;
   }
 }
+
+/* ─── Type Badges ───────────────────────────────────── */
+.pokemon-display {
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.pokemon-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-left: auto;
+  align-items: center;
+}
+
+.type-badge {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+/* Type colours — standard Pokémon palette */
+.type-normal {
+  background: #9a9a7a;
+  color: #fff;
+}
+.type-fire {
+  background: #e05a28;
+  color: #fff;
+}
+.type-water {
+  background: #4090d0;
+  color: #fff;
+}
+.type-electric {
+  background: #e8c030;
+  color: #222;
+}
+.type-grass {
+  background: #50a840;
+  color: #fff;
+}
+.type-ice {
+  background: #68c8d8;
+  color: #222;
+}
+.type-fighting {
+  background: #b82010;
+  color: #fff;
+}
+.type-poison {
+  background: #8840a0;
+  color: #fff;
+}
+.type-ground {
+  background: #c8a840;
+  color: #222;
+}
+.type-flying {
+  background: #7060d0;
+  color: #fff;
+}
+.type-psychic {
+  background: #e02870;
+  color: #fff;
+}
+.type-bug {
+  background: #80a018;
+  color: #fff;
+}
+.type-rock {
+  background: #a08820;
+  color: #fff;
+}
+.type-ghost {
+  background: #503870;
+  color: #fff;
+}
+.type-dragon {
+  background: #5030e0;
+  color: #fff;
+}
+.type-dark {
+  background: #483828;
+  color: #fff;
+}
+.type-steel {
+  background: #8898a8;
+  color: #fff;
+}
+.type-fairy {
+  background: #d070a0;
+  color: #fff;
+}
