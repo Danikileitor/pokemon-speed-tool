@@ -1121,17 +1121,50 @@ function getSpeed(name, boost, evs) {
   return tier ? tier.spe : null;
 }
 
-// Pokemon sprite URL (uses PokeAPI sprites via Smogon convention)
+// Pokemon sprite URL (Pokémon Showdown sprites)
 function getSpriteUrl(name) {
-  // Convert name to Smogon sprite key
-  const key = name
+  const n = name.trim();
+
+  // Paldean Tauros: random between the 3 forms
+  if (n === 'Paldean Tauros') {
+    const forms = ['tauros-paldeacombat', 'tauros-paldeaaqua', 'tauros-paldeablaze'];
+    return `https://play.pokemonshowdown.com/sprites/ani/${forms[Math.floor(Math.random() * forms.length)]}.gif`;
+  }
+
+  // Detect prefix and whether it's a Mega
+  const isMega     = /^Mega /i.test(n);
+  const isAlolan   = /^Alolan /i.test(n);
+  const isGalarian = /^Galarian /i.test(n);
+  const isHisuian  = /^Hisuian /i.test(n);
+  const isPaldean  = /^Paldean /i.test(n);
+
+  // Strip the regional/mega prefix to get the base name
+  let base = n
+    .replace(/^Mega /i, '')
+    .replace(/^Alolan /i, '')
+    .replace(/^Galarian /i, '')
+    .replace(/^Hisuian /i, '')
+    .replace(/^Paldean /i, '');
+
+  // Slugify base name: lowercase, remove punctuation, spaces → hyphens
+  let slug = base
     .toLowerCase()
-    .replace(/^mega\s+/,  '')
-    .replace(/\s+/g, '-')
-    .replace(/['.]/g, '')
-    .replace(/^alolan\s*/,  '')
-    .replace(/^galarian\s*/, '')
-    .replace(/^hisuian\s*/, '')
-    .replace(/^paldean\s*/, '');
-  return `https://play.pokemonshowdown.com/sprites/ani/${key}.gif`;
+    .replace(/['.:\u200b-\u200d]/g, '')  // remove apostrophes, dots, zero-width chars
+    .replace(/\s+/g, '-');
+
+  // Append the correct suffix
+  if (isMega) {
+    // Mega Charizard X/Y: charizard-mega-x / charizard-mega-y
+    if (/^charizard-[xy]$/.test(slug)) {
+      slug = 'charizard-mega-' + slug.slice(-1);
+    } else {
+      slug = slug + '-mega';
+    }
+  }
+  if (isAlolan)   slug = slug + '-alola';
+  if (isGalarian) slug = slug + '-galar';
+  if (isHisuian)  slug = slug + '-hisui';
+  if (isPaldean)  slug = slug + '-paldea';
+
+  return `https://play.pokemonshowdown.com/sprites/ani/${slug}.gif`;
 }
