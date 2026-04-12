@@ -56,9 +56,10 @@ function setupSearch(inputEl, dropdownEl, side) {
 function renderDropdown(dropdownEl, matches, side) {
   if (!matches.length) { dropdownEl.classList.remove('open'); return; }
   dropdownEl.innerHTML = matches.map(name => {
-    const spriteUrl = getSpriteUrl(name);
+    const animUrl = getSpriteUrl(name);
+    const staticUrl = getSpriteFallbackUrl(name);
     return `<div class="dropdown-item" data-name="${name}">
-      <img src="${spriteUrl}" onerror="this.style.display='none'" alt="">
+      <img src="${animUrl}" onerror="this.onerror=null;this.src='${staticUrl}';this.onerror=function(){this.style.display='none';}" alt="">
       ${name}
     </div>`;
   }).join('');
