@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Champions OU — Speed Tier Comparator</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="grid-bg"></div>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo-mark">SPD</div>
+      <div class="header-text">
+        <h1>Speed Tier <span class="accent">Comparator</span></h1>
+        <p class="subtitle">Champions OU — Smogon Format</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="panels">
+      <!-- Pokemon A -->
+      <div class="panel" id="panel-a">
+        <div class="panel-label">POKÉMON A</div>
+        <div class="panel-content">
+          <div class="pokemon-selector">
+            <label class="field-label">Seleccionar Pokémon</label>
+            <div class="select-wrapper">
+              <input type="text" id="search-a" class="pokemon-search" placeholder="Buscar pokémon..." autocomplete="off">
+              <div class="dropdown" id="dropdown-a"></div>
+            </div>
+            <div class="selected-pokemon" id="selected-a">
+              <div class="pokemon-display">
+                <div class="poke-icon-wrap" id="icon-a">
+                  <div class="poke-placeholder">?</div>
+                </div>
+                <span class="pokemon-name" id="name-a">—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="modifiers">
+            <div class="modifier-group">
+              <label class="field-label">Modificador (+/-)</label>
+              <div class="segmented" id="boost-a">
+                <button class="seg-btn" data-val="-1">−2</button>
+                <button class="seg-btn" data-val="-1">−1</button>
+                <button class="seg-btn active" data-val="0">0</button>
+                <button class="seg-btn" data-val="1">+1</button>
+                <button class="seg-btn" data-val="2">+2</button>
+              </div>
+            </div>
+
+            <div class="modifier-group">
+              <label class="field-label">EVs</label>
+              <div class="segmented" id="evs-a">
+                <button class="seg-btn" data-val="32+">32+</button>
+                <button class="seg-btn active" data-val="32">32</button>
+                <button class="seg-btn" data-val="0">0</button>
+                <button class="seg-btn" data-val="0-">0−</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="speed-result" id="result-a">
+            <div class="result-label">Velocidad</div>
+            <div class="result-value" id="speed-a">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VS Divider -->
+      <div class="vs-divider">
+        <div class="vs-line"></div>
+        <div class="vs-badge" id="vs-outcome">VS</div>
+        <div class="vs-line"></div>
+      </div>
+
+      <!-- Pokemon B -->
+      <div class="panel" id="panel-b">
+        <div class="panel-label">POKÉMON B</div>
+        <div class="panel-content">
+          <div class="pokemon-selector">
+            <label class="field-label">Seleccionar Pokémon</label>
+            <div class="select-wrapper">
+              <input type="text" id="search-b" class="pokemon-search" placeholder="Buscar pokémon..." autocomplete="off">
+              <div class="dropdown" id="dropdown-b"></div>
+            </div>
+            <div class="selected-pokemon" id="selected-b">
+              <div class="pokemon-display">
+                <div class="poke-icon-wrap" id="icon-b">
+                  <div class="poke-placeholder">?</div>
+                </div>
+                <span class="pokemon-name" id="name-b">—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="modifiers">
+            <div class="modifier-group">
+              <label class="field-label">Modificador (+/-)</label>
+              <div class="segmented" id="boost-b">
+                <button class="seg-btn" data-val="-1">−2</button>
+                <button class="seg-btn" data-val="-1">−1</button>
+                <button class="seg-btn active" data-val="0">0</button>
+                <button class="seg-btn" data-val="1">+1</button>
+                <button class="seg-btn" data-val="2">+2</button>
+              </div>
+            </div>
+
+            <div class="modifier-group">
+              <label class="field-label">EVs</label>
+              <div class="segmented" id="evs-b">
+                <button class="seg-btn" data-val="32+">32+</button>
+                <button class="seg-btn active" data-val="32">32</button>
+                <button class="seg-btn" data-val="0">0</button>
+                <button class="seg-btn" data-val="0-">0−</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="speed-result" id="result-b">
+            <div class="result-label">Velocidad</div>
+            <div class="result-value" id="speed-b">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- All Matching Tiers -->
+    <div class="tiers-section" id="tiers-section">
+      <div class="tiers-header">
+        <span>TIERS DISPONIBLES</span>
+        <span class="tiers-hint">Selecciona un Pokémon para ver sus tiers</span>
+      </div>
+      <div class="tiers-grid" id="tiers-grid">
+        <div class="tiers-empty">Selecciona un Pokémon para ver sus niveles de velocidad disponibles</div>
+      </div>
+    </div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
