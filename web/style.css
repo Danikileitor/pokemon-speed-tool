@@ -716,3 +716,56 @@ main {
   background: #d070a0;
   color: #fff;
 }
+
+/* ─── Effects Grid ──────────────────────────────────── */
+.effects-grid {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.effect-btn {
+  flex: 1;
+  min-width: 90px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.effect-btn:hover:not(.active) {
+  border-color: var(--accent);
+  color: var(--text);
+  background: rgba(0, 229, 255, 0.05);
+}
+
+.effect-btn.active {
+  border-color: var(--gold);
+  background: rgba(255, 215, 64, 0.12);
+  color: var(--gold);
+  box-shadow: 0 0 10px rgba(255, 215, 64, 0.2);
+}
+
+.effect-btn[data-val="trickroom"].active {
+  border-color: var(--accent2);
+  background: rgba(124, 77, 255, 0.15);
+  color: #b39dff;
+  box-shadow: 0 0 10px rgba(124, 77, 255, 0.25);
+}
+
+/* Speed base value shown when modified */
+.speed-base {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 2px;
+}

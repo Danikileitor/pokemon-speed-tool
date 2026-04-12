@@ -1,7 +1,7 @@
 // ─── State ───────────────────────────────────────────
 const state = {
-  a: { pokemon: null, boost: 0, evs: "32" },
-  b: { pokemon: null, boost: 0, evs: "32" },
+  a: { pokemon: null, boost: 0, evs: "32", effects: new Set() },
+  b: { pokemon: null, boost: 0, evs: "32", effects: new Set() },
 };
 
 // ─── DOM refs ────────────────────────────────────────
@@ -27,6 +27,8 @@ const els = {
   panelB: document.getElementById('panel-b'),
   tiersGrid: document.getElementById('tiers-grid'),
   tiersHint: document.querySelector('.tiers-hint'),
+  effectsA: document.getElementById('effects-a'),
+  effectsB: document.getElementById('effects-b'),
 };
 
 // ─── Search / Dropdown ──────────────────────────────
@@ -118,6 +120,24 @@ function setupSegmented(groupEl, side, type) {
 }
 
 // ─── Speed Calculation ──────────────────────────────
+
+// Apply extra effects to a base speed value
+function applyEffects(baseSpeed, effects) {
+  if (baseSpeed === null) return null;
+  let spd = baseSpeed;
+  if (effects.has('scarf'))   spd = Math.floor(spd * 1.5);
+  if (effects.has('swift'))   spd = spd * 2;
+  // trick room doesn't change the number, handled in comparison
+  return spd;
+}
+
+function getEffectiveSpeed(side) {
+  const s = state[side];
+  if (!s.pokemon) return null;
+  const base = getSpeed(s.pokemon, s.boost, s.evs);
+  return applyEffects(base, s.effects);
+}
+
 function updateSpeed(side) {
   const s = state[side];
   const speedEl = side === 'a' ? els.speedA : els.speedB;
@@ -129,18 +149,22 @@ function updateSpeed(side) {
     return;
   }
 
-  const speed = getSpeed(s.pokemon, s.boost, s.evs);
+  const baseSpeed = getSpeed(s.pokemon, s.boost, s.evs);
+  const effectiveSpeed = applyEffects(baseSpeed, s.effects);
 
-  if (speed !== null) {
-    speedEl.textContent = speed;
+  if (effectiveSpeed !== null) {
+    // Show effective speed; if modified show base too
+    const isModified = s.effects.has('scarf') || s.effects.has('swift');
+    speedEl.innerHTML = effectiveSpeed +
+      (isModified && baseSpeed !== effectiveSpeed
+        ? `<span class="speed-base"> (base ${baseSpeed})</span>`
+        : '');
     speedEl.className = 'result-value has-value';
-    // Remove any existing no-data note
     const note = resultEl.querySelector('.result-no-data');
     if (note) note.remove();
   } else {
     speedEl.textContent = '—';
     speedEl.className = 'result-value';
-    // Show available tiers hint
     let note = resultEl.querySelector('.result-no-data');
     if (!note) {
       note = document.createElement('div');
@@ -154,8 +178,10 @@ function updateSpeed(side) {
 }
 
 function updateComparison() {
-  const sA = state.a.pokemon ? getSpeed(state.a.pokemon, state.a.boost, state.a.evs) : null;
-  const sB = state.b.pokemon ? getSpeed(state.b.pokemon, state.b.boost, state.b.evs) : null;
+  const sA = getEffectiveSpeed('a');
+  const sB = getEffectiveSpeed('b');
+  // Trick Room: the "winner" is the slower pokemon (lower speed)
+  const trickRoom = state.a.effects.has('trickroom') || state.b.effects.has('trickroom');
 
   // Reset
   els.panelA.classList.remove('winner', 'loser');
@@ -167,20 +193,24 @@ function updateComparison() {
 
   if (sA === null || sB === null) return;
 
-  if (sA > sB) {
+  // In Trick Room, the slower mon goes first
+  const aFirst = trickRoom ? sA < sB : sA > sB;
+  const bFirst = trickRoom ? sB < sA : sB > sA;
+
+  if (aFirst) {
     els.panelA.classList.add('winner');
     els.panelB.classList.add('loser');
     els.speedA.classList.add('winner');
     els.speedB.classList.add('loser');
     els.vsBadge.className = 'vs-badge faster-a';
-    els.vsBadge.textContent = 'A >';
-  } else if (sB > sA) {
+    els.vsBadge.textContent = trickRoom ? 'A <' : 'A >';
+  } else if (bFirst) {
     els.panelB.classList.add('winner');
     els.panelA.classList.add('loser');
     els.speedB.classList.add('winner');
     els.speedA.classList.add('loser');
     els.vsBadge.className = 'vs-badge faster-b';
-    els.vsBadge.textContent = '< B';
+    els.vsBadge.textContent = trickRoom ? '> B' : '< B';
   } else {
     els.speedA.classList.add('tie');
     els.speedB.classList.add('tie');
@@ -303,6 +333,39 @@ function syncSegmented(groupEl, value, type) {
   });
 }
 
+// ─── Effects Setup ──────────────────────────────────
+function setupEffects(groupEl, side) {
+  groupEl.querySelectorAll('.effect-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = btn.dataset.val;
+      if (val === 'trickroom') {
+        // Trick Room toggles globally (same state for both sides makes sense,
+        // but we store per-side so user can choose freely)
+        if (state[side].effects.has('trickroom')) {
+          state[side].effects.delete('trickroom');
+          btn.classList.remove('active');
+        } else {
+          state[side].effects.add('trickroom');
+          btn.classList.add('active');
+        }
+      } else {
+        // scarf and swift are mutually exclusive with each other
+        const wasActive = state[side].effects.has(val);
+        state[side].effects.delete('scarf');
+        state[side].effects.delete('swift');
+        groupEl.querySelectorAll('.effect-btn[data-val="scarf"], .effect-btn[data-val="swift"]')
+          .forEach(b => b.classList.remove('active'));
+        if (!wasActive) {
+          state[side].effects.add(val);
+          btn.classList.add('active');
+        }
+      }
+      updateSpeed(side);
+      renderTiers();
+    });
+  });
+}
+
 // ─── Init ────────────────────────────────────────────
 setupSearch(els.searchA, els.dropdownA, 'a');
 setupSearch(els.searchB, els.dropdownB, 'b');
@@ -310,3 +373,5 @@ setupSegmented(els.boostA, 'a', 'boost');
 setupSegmented(els.boostB, 'b', 'boost');
 setupSegmented(els.evsA, 'a', 'evs');
 setupSegmented(els.evsB, 'b', 'evs');
+setupEffects(els.effectsA, 'a');
+setupEffects(els.effectsB, 'b');
