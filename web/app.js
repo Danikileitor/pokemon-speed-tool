@@ -125,8 +125,8 @@ function setupSegmented(groupEl, side, type) {
 function applyEffects(baseSpeed, effects) {
   if (baseSpeed === null) return null;
   let spd = baseSpeed;
-  if (effects.has('scarf'))   spd = Math.floor(spd * 1.5);
-  if (effects.has('swift'))   spd = spd * 2;
+  if (effects.has('scarf')) spd = Math.floor(spd * 1.5);
+  if (effects.has('swift')) spd = spd * 2;
   // trick room doesn't change the number, handled in comparison
   return spd;
 }
@@ -375,3 +375,54 @@ setupSegmented(els.evsA, 'a', 'evs');
 setupSegmented(els.evsB, 'b', 'evs');
 setupEffects(els.effectsA, 'a');
 setupEffects(els.effectsB, 'b');
+
+// ─── April Fools Easter Egg ──────────────────────────
+(function () {
+  const btn = document.getElementById('afd-toggle');
+  if (!btn) return;
+
+  function refreshAllSprites() {
+    ['a', 'b'].forEach(side => {
+      const name = state[side].pokemon;
+      if (!name) return;
+
+      const iconEl = document.getElementById('icon-' + side);
+      const animUrl = getSpriteUrl(name);
+      const fallbackUrl = getSpriteFallbackUrl(name);
+      const initial = name[0].toUpperCase();
+
+      iconEl.innerHTML = `
+      <img 
+        src="${animUrl}" 
+        alt="${name}" 
+        onerror="
+          this.onerror=null; 
+          this.src='${fallbackUrl}'; 
+          this.onerror=function(){
+            this.parentElement.innerHTML='<div class=&quot;poke-placeholder&quot;>${initial}</div>';
+          };
+        "
+      >`;
+    });
+
+    // Refresh open dropdown if any
+    ['a', 'b'].forEach(side => {
+      const ddEl = document.getElementById('dropdown-' + side);
+      const searchEl = document.getElementById('search-' + side);
+      if (ddEl && ddEl.classList.contains('open')) {
+        const q = searchEl.value.trim().toLowerCase();
+        if (q) {
+          const matches = ALL_POKEMON.filter(p => p.toLowerCase().includes(q)).slice(0, 30);
+          renderDropdown(ddEl, matches, side);
+        }
+      }
+    });
+  }
+
+  btn.addEventListener('click', () => {
+    AFD_MODE = !AFD_MODE;
+    btn.classList.toggle('afd-active', AFD_MODE);
+    btn.title = AFD_MODE ? 'Easter egg active' : 'Easter egg';
+    refreshAllSprites();
+  });
+})();

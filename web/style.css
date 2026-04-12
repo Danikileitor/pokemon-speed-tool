@@ -769,3 +769,52 @@ main {
   display: block;
   margin-top: 2px;
 }
+
+/* ─── April Fools Button ────────────────────────────── */
+#afd-toggle {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 1000;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0.25;
+  transition:
+    opacity 0.2s,
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#afd-toggle:hover {
+  opacity: 1;
+  border-color: var(--gold);
+  box-shadow: 0 0 12px rgba(255, 215, 64, 0.3);
+  transform: rotate(15deg) scale(1.1);
+}
+
+#afd-toggle.afd-active {
+  opacity: 1;
+  border-color: var(--gold);
+  background: rgba(255, 215, 64, 0.12);
+  box-shadow: 0 0 16px rgba(255, 215, 64, 0.4);
+  animation: afd-pulse 2s ease-in-out infinite;
+}
+
+@keyframes afd-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 16px rgba(255, 215, 64, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(255, 215, 64, 0.7);
+  }
+}
