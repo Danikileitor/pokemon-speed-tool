@@ -1,5 +1,11 @@
 /* ─── Reset & Base ─────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 :root {
   --bg: #07080d;
@@ -18,11 +24,12 @@
   --text-muted: #6b75aa;
   --text-dim: #3a4060;
   --radius: 10px;
-  --font-display: 'Rajdhani', sans-serif;
-  --font-body: 'Exo 2', sans-serif;
+  --font-display: "Rajdhani", sans-serif;
+  --font-body: "Exo 2", sans-serif;
 }
 
-html, body {
+html,
+body {
   min-height: 100vh;
   background: var(--bg);
   color: var(--text);
@@ -50,8 +57,8 @@ html, body {
     0deg,
     transparent,
     transparent 3px,
-    rgba(0,0,0,0.15) 3px,
-    rgba(0,0,0,0.15) 4px
+    rgba(0, 0, 0, 0.15) 3px,
+    rgba(0, 0, 0, 0.15) 4px
   );
   pointer-events: none;
   z-index: 0;
@@ -64,7 +71,11 @@ header {
   z-index: 10;
   padding: 28px 32px 24px;
   border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, rgba(0,229,255,0.05) 0%, transparent 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 229, 255, 0.05) 0%,
+    transparent 100%
+  );
 }
 
 .header-inner {
@@ -89,7 +100,7 @@ header {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 0 20px rgba(0,229,255,0.4);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
 }
 
 h1 {
@@ -137,12 +148,16 @@ main {
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: visible;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
 }
 
 .panel.winner {
   border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent), 0 0 30px rgba(0,229,255,0.15);
+  box-shadow:
+    0 0 0 1px var(--accent),
+    0 0 30px rgba(0, 229, 255, 0.15);
 }
 
 .panel.loser {
@@ -194,12 +209,14 @@ main {
   font-size: 14px;
   padding: 10px 14px;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .pokemon-search:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(0,229,255,0.1);
+  box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.1);
 }
 
 .pokemon-search::placeholder {
@@ -209,7 +226,8 @@ main {
 .dropdown {
   position: absolute;
   top: calc(100% + 6px);
-  left: 0; right: 0;
+  left: 0;
+  right: 0;
   background: var(--surface2);
   border: 1px solid var(--border-glow);
   border-radius: var(--radius);
@@ -217,10 +235,12 @@ main {
   overflow-y: auto;
   z-index: 100;
   display: none;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
 }
 
-.dropdown.open { display: block; }
+.dropdown.open {
+  display: block;
+}
 
 .dropdown-item {
   padding: 9px 14px;
@@ -230,21 +250,34 @@ main {
   align-items: center;
   gap: 10px;
   transition: background 0.15s;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
-.dropdown-item:last-child { border-bottom: none; }
-.dropdown-item:hover { background: rgba(0,229,255,0.06); color: var(--accent); }
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+.dropdown-item:hover {
+  background: rgba(0, 229, 255, 0.06);
+  color: var(--accent);
+}
 
 .dropdown-item img {
   width: 24px;
   height: 24px;
   image-rendering: pixelated;
+  object-fit: scale-down;
 }
 
-.dropdown::-webkit-scrollbar { width: 4px; }
-.dropdown::-webkit-scrollbar-track { background: transparent; }
-.dropdown::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 4px; }
+.dropdown::-webkit-scrollbar {
+  width: 4px;
+}
+.dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+.dropdown::-webkit-scrollbar-thumb {
+  background: var(--border-glow);
+  border-radius: 4px;
+}
 
 /* ─── Selected Pokemon Display ──────────────────────── */
 .selected-pokemon {
@@ -277,13 +310,19 @@ main {
   width: 48px;
   height: 48px;
   image-rendering: pixelated;
-  filter: drop-shadow(0 0 8px rgba(0,229,255,0.3));
+  object-fit: scale-down;
+  filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.3));
   animation: float 3s ease-in-out infinite;
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
 }
 
 .poke-placeholder {
@@ -339,14 +378,14 @@ main {
 }
 
 .seg-btn:hover:not(.active) {
-  background: rgba(0,229,255,0.07);
+  background: rgba(0, 229, 255, 0.07);
   color: var(--text);
 }
 
 .seg-btn.active {
   background: var(--accent);
   color: var(--bg);
-  box-shadow: 0 0 12px rgba(0,229,255,0.35);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.35);
 }
 
 /* ─── Speed Result ──────────────────────────────────── */
@@ -361,10 +400,14 @@ main {
 }
 
 .speed-result::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0,229,255,0.04) 0%, transparent 60%);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 229, 255, 0.04) 0%,
+    transparent 60%
+  );
   pointer-events: none;
 }
 
@@ -386,10 +429,18 @@ main {
   transition: color 0.3s;
 }
 
-.result-value.has-value { color: var(--accent); }
-.result-value.winner { color: var(--green); }
-.result-value.loser { color: var(--red); }
-.result-value.tie { color: var(--gold); }
+.result-value.has-value {
+  color: var(--accent);
+}
+.result-value.winner {
+  color: var(--green);
+}
+.result-value.loser {
+  color: var(--red);
+}
+.result-value.tie {
+  color: var(--gold);
+}
 
 .result-no-data {
   font-size: 12px;
@@ -434,19 +485,19 @@ main {
 .vs-badge.faster-a {
   color: var(--green);
   border-color: var(--green);
-  box-shadow: 0 0 20px rgba(105,255,71,0.2);
+  box-shadow: 0 0 20px rgba(105, 255, 71, 0.2);
 }
 
 .vs-badge.faster-b {
   color: var(--green);
   border-color: var(--green);
-  box-shadow: 0 0 20px rgba(105,255,71,0.2);
+  box-shadow: 0 0 20px rgba(105, 255, 71, 0.2);
 }
 
 .vs-badge.tie-badge {
   color: var(--gold);
   border-color: var(--gold);
-  box-shadow: 0 0 20px rgba(255,215,64,0.2);
+  box-shadow: 0 0 20px rgba(255, 215, 64, 0.2);
 }
 
 /* ─── Tiers Section ─────────────────────────────────── */
@@ -507,17 +558,17 @@ main {
 
 .tier-chip:hover {
   border-color: var(--accent);
-  box-shadow: 0 0 10px rgba(0,229,255,0.1);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.1);
 }
 
 .tier-chip.selected-a {
   border-color: var(--accent);
-  background: rgba(0,229,255,0.08);
+  background: rgba(0, 229, 255, 0.08);
 }
 
 .tier-chip.selected-b {
   border-color: var(--accent2);
-  background: rgba(124,77,255,0.08);
+  background: rgba(124, 77, 255, 0.08);
 }
 
 .tier-speed {
@@ -540,8 +591,12 @@ main {
   font-weight: 500;
 }
 
-.tier-for-a { color: var(--accent); }
-.tier-for-b { color: var(--accent2); }
+.tier-for-a {
+  color: var(--accent);
+}
+.tier-for-b {
+  color: var(--accent2);
+}
 
 /* ─── Responsive ────────────────────────────────────── */
 @media (max-width: 700px) {
