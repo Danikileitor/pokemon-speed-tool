@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pokemon Champions — Speed Tier Comparator</title>
+  <title>Pokémon Champions — Speed Tier Comparator</title>
   <link rel="stylesheet" href="style.css">
   <link
     href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;700&display=swap"
@@ -20,7 +20,7 @@
       <div class="logo-mark">SPD</div>
       <div class="header-text">
         <h1>Speed Tier <span class="accent">Comparator</span></h1>
-        <p class="subtitle">Pokemon Champions</p>
+        <p class="subtitle">Pokémon Champions</p>
       </div>
     </div>
   </header>
@@ -32,10 +32,9 @@
         <div class="panel-label">POKÉMON A</div>
         <div class="panel-content">
           <div class="pokemon-selector">
-            <label class="field-label">Seleccionar Pokémon</label>
+            <label class="field-label">Select a Pokémon</label>
             <div class="select-wrapper">
-              <input type="text" id="search-a" class="pokemon-search" placeholder="Buscar pokémon..."
-                autocomplete="off">
+              <input type="text" id="search-a" class="pokemon-search" placeholder="Pokémon..." autocomplete="off">
               <div class="dropdown" id="dropdown-a"></div>
             </div>
             <div class="selected-pokemon" id="selected-a">
@@ -50,7 +49,7 @@
 
           <div class="modifiers">
             <div class="modifier-group">
-              <label class="field-label">Modificador (+/-)</label>
+              <label class="field-label">Mod (+/-)</label>
               <div class="segmented" id="boost-a">
                 <button class="seg-btn" data-val="-1">−2</button>
                 <button class="seg-btn" data-val="-1">−1</button>
@@ -72,7 +71,7 @@
           </div>
 
           <div class="speed-result" id="result-a">
-            <div class="result-label">Velocidad</div>
+            <div class="result-label">Speed</div>
             <div class="result-value" id="speed-a">—</div>
           </div>
         </div>
@@ -90,10 +89,9 @@
         <div class="panel-label">POKÉMON B</div>
         <div class="panel-content">
           <div class="pokemon-selector">
-            <label class="field-label">Seleccionar Pokémon</label>
+            <label class="field-label">Select a Pokémon</label>
             <div class="select-wrapper">
-              <input type="text" id="search-b" class="pokemon-search" placeholder="Buscar pokémon..."
-                autocomplete="off">
+              <input type="text" id="search-b" class="pokemon-search" placeholder="Pokémon..." autocomplete="off">
               <div class="dropdown" id="dropdown-b"></div>
             </div>
             <div class="selected-pokemon" id="selected-b">
@@ -108,7 +106,7 @@
 
           <div class="modifiers">
             <div class="modifier-group">
-              <label class="field-label">Modificador (+/-)</label>
+              <label class="field-label">Mod (+/-)</label>
               <div class="segmented" id="boost-b">
                 <button class="seg-btn" data-val="-1">−2</button>
                 <button class="seg-btn" data-val="-1">−1</button>
@@ -130,7 +128,7 @@
           </div>
 
           <div class="speed-result" id="result-b">
-            <div class="result-label">Velocidad</div>
+            <div class="result-label">Speed</div>
             <div class="result-value" id="speed-b">—</div>
           </div>
         </div>
@@ -140,11 +138,11 @@
     <!-- All Matching Tiers -->
     <div class="tiers-section" id="tiers-section">
       <div class="tiers-header">
-        <span>TIERS DISPONIBLES</span>
-        <span class="tiers-hint">Selecciona un Pokémon para ver sus tiers</span>
+        <span>SPEED TIERS</span>
+        <span class="tiers-hint">Select a Pokémon to view its speed tiers</span>
       </div>
       <div class="tiers-grid" id="tiers-grid">
-        <div class="tiers-empty">Selecciona un Pokémon para ver sus niveles de velocidad disponibles</div>
+        <div class="tiers-empty">Select a Pokémon to view its available speed tiers</div>
       </div>
     </div>
   </main>
