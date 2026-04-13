@@ -819,22 +819,29 @@ main {
   }
 }
 
-/* ─── Tailwind & Paralysis effect colours ───────────── */
+/* ─── Extra effect colours ──────────────────────────── */
 .effect-btn[data-val="tailwind"].active {
   border-color: #4fc3f7;
-  background: rgba(79, 195, 247, 0.12);
+  background: rgba(79,195,247,0.12);
   color: #4fc3f7;
-  box-shadow: 0 0 10px rgba(79, 195, 247, 0.25);
+  box-shadow: 0 0 10px rgba(79,195,247,0.25);
 }
 
 .effect-btn[data-val="paralysis"].active {
   border-color: #e8c030;
-  background: rgba(232, 192, 48, 0.12);
+  background: rgba(232,192,48,0.12);
   color: #e8c030;
-  box-shadow: 0 0 10px rgba(232, 192, 48, 0.25);
+  box-shadow: 0 0 10px rgba(232,192,48,0.25);
 }
 
-/* 5 buttons: wrap into 2 rows (3+2) */
+.effect-btn[data-val="ironball"].active {
+  border-color: #9e9e9e;
+  background: rgba(158,158,158,0.12);
+  color: #bdbdbd;
+  box-shadow: 0 0 10px rgba(158,158,158,0.2);
+}
+
+/* 6 buttons: 3 columns × 2 rows */
 .effects-grid {
   display: flex;
   flex-wrap: wrap;
