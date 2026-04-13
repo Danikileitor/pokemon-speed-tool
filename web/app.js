@@ -4,6 +4,43 @@ const state = {
   b: { pokemon: null, boost: 0, evs: "32+", sp: 32, nature: "+", effects: new Set() },
 };
 
+// ─── Lógica de Cálculo Dinámico ──────────────────────
+
+// Tabla de multiplicadores de Boost (Stat Stages -6 a +6)
+const BOOST_MULT = {
+  "-6": 0.25, "-5": 0.28, "-4": 0.33, "-3": 0.40, "-2": 0.50, "-1": 0.66,
+  "0": 1.0, "1": 1.5, "2": 2.0, "3": 2.5, "4": 3.0, "5": 3.5, "6": 4.0
+};
+
+// Extraer velocidades base de SPEED_DATA (Base = Vel a Boost 0 y SP 32 - 32)
+// Esto permite que tu app funcione con cualquier Pokémon de tu lista actual.
+const POKEMON_BASES = {};
+SPEED_DATA.forEach(d => {
+  if (d.boost === 0 && d.evs === "32") {
+    d.pokemon.forEach(name => {
+      POKEMON_BASES[name] = d.spe - 32;
+    });
+  }
+});
+
+/**
+ * Calcula la velocidad final para cualquier combinación.
+ * Fórmula: floor(floor((Base + SP) * Nat) * Boost)
+ */
+function calculateSpeed(name, boost, sp, nature) {
+  const base = POKEMON_BASES[name];
+  if (base === undefined) return null;
+
+  const natMult = nature === "+" ? 1.1 : (nature === "-" ? 0.9 : 1.0);
+  const boostMult = BOOST_MULT[boost] || 1.0;
+
+  // Cálculo siguiendo el orden de redondeo oficial de Pokémon
+  let stat = Math.floor((base + sp) * natMult);
+  stat = Math.floor(stat * boostMult);
+
+  return stat;
+}
+
 // Convert sp (0-32) + nature to the evs key used in SPEED_DATA
 function spNatureToEvsKey(sp, nature) {
   if (sp === 32 && nature === "+") return "32+";
@@ -149,9 +186,9 @@ function setupSegmented(groupEl, side, type) {
 
 function evsKeyToSpNature(key) {
   if (key === "32+") return { sp: 32, nature: "+" };
-  if (key === "32")  return { sp: 32, nature: "=" };
-  if (key === "0")   return { sp: 0,  nature: "=" };
-  if (key === "0-")  return { sp: 0,  nature: "-" };
+  if (key === "32") return { sp: 32, nature: "=" };
+  if (key === "0") return { sp: 0, nature: "=" };
+  if (key === "0-") return { sp: 0, nature: "-" };
   return { sp: 32, nature: "+" };
 }
 
@@ -248,7 +285,7 @@ function applyEffects(baseSpeed, effects) {
 function getEffectiveSpeed(side) {
   const s = state[side];
   if (!s.pokemon) return null;
-  const base = getSpeed(s.pokemon, s.boost, s.evs);
+  const base = calculateSpeed(s.pokemon, s.boost, s.sp, s.nature);
   return applyEffects(base, s.effects);
 }
 
@@ -263,7 +300,7 @@ function updateSpeed(side) {
     return;
   }
 
-  const baseSpeed = getSpeed(s.pokemon, s.boost, s.evs);
+  const baseSpeed = calculateSpeed(s.pokemon, s.boost, s.sp, s.nature);
   const effectiveSpeed = applyEffects(baseSpeed, s.effects);
 
   if (effectiveSpeed !== null) {
