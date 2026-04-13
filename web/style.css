@@ -103,10 +103,6 @@ header {
   box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
 }
 
-.logo-mark img {
-  image-rendering: pixelated;
-}
-
 h1 {
   font-family: var(--font-display);
   font-size: 26px;
@@ -801,7 +797,9 @@ main {
   background: var(--accent);
   cursor: pointer;
   box-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
-  transition: box-shadow 0.18s, transform 0.18s;
+  transition:
+    box-shadow 0.18s,
+    transform 0.18s;
 }
 
 .boost-slider::-webkit-slider-thumb:hover,
@@ -893,7 +891,6 @@ main {
   color: var(--bg);
   box-shadow: 0 0 8px rgba(105, 255, 71, 0.35);
 }
-
 
 #afd-toggle {
   position: fixed;
