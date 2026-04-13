@@ -47,10 +47,8 @@ function spNatureToEvsKey(sp, nature) {
   if (sp === 32 && nature === "=") return "32";
   if (sp === 0 && nature === "=") return "0";
   if (sp === 0 && nature === "-") return "0-";
-  // Approximate for intermediate values — map to closest preset
-  if (nature === "+") return "32+";
-  if (nature === "-") return "0-";
-  return sp >= 16 ? "32" : "0";
+  // Si no es ninguna de estas combinaciones exactas, no devolvemos nada (se desmarcan los botones)
+  return null;
 }
 
 const els = {
