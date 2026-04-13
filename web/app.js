@@ -1,10 +1,21 @@
 // ─── State ───────────────────────────────────────────
 const state = {
-  a: { pokemon: null, boost: 0, evs: "32+", effects: new Set() },
-  b: { pokemon: null, boost: 0, evs: "32+", effects: new Set() },
+  a: { pokemon: null, boost: 0, evs: "32+", sp: 32, nature: "+", effects: new Set() },
+  b: { pokemon: null, boost: 0, evs: "32+", sp: 32, nature: "+", effects: new Set() },
 };
 
-// ─── DOM refs ────────────────────────────────────────
+// Convert sp (0-32) + nature to the evs key used in SPEED_DATA
+function spNatureToEvsKey(sp, nature) {
+  if (sp === 32 && nature === "+") return "32+";
+  if (sp === 32 && nature === "=") return "32";
+  if (sp === 0 && nature === "=") return "0";
+  if (sp === 0 && nature === "-") return "0-";
+  // Approximate for intermediate values — map to closest preset
+  if (nature === "+") return "32+";
+  if (nature === "-") return "0-";
+  return sp >= 16 ? "32" : "0";
+}
+
 const els = {
   searchA: document.getElementById('search-a'),
   searchB: document.getElementById('search-b'),
@@ -20,8 +31,18 @@ const els = {
   resultB: document.getElementById('result-b'),
   boostA: document.getElementById('boost-a'),
   boostB: document.getElementById('boost-b'),
+  boostSliderA: document.getElementById('boost-slider-a'),
+  boostSliderB: document.getElementById('boost-slider-b'),
+  boostDisplayA: document.getElementById('boost-display-a'),
+  boostDisplayB: document.getElementById('boost-display-b'),
   evsA: document.getElementById('evs-a'),
   evsB: document.getElementById('evs-b'),
+  spSliderA: document.getElementById('sp-slider-a'),
+  spSliderB: document.getElementById('sp-slider-b'),
+  spDisplayA: document.getElementById('sp-display-a'),
+  spDisplayB: document.getElementById('sp-display-b'),
+  natureA: document.getElementById('nature-a'),
+  natureB: document.getElementById('nature-b'),
   vsBadge: document.getElementById('vs-outcome'),
   panelA: document.getElementById('panel-a'),
   panelB: document.getElementById('panel-b'),
@@ -102,20 +123,110 @@ function selectPokemon(name, side) {
 
 // ─── Segmented Buttons ──────────────────────────────
 function setupSegmented(groupEl, side, type) {
-  groupEl.querySelectorAll('.seg-btn').forEach((btn, idx) => {
+  groupEl.querySelectorAll('.seg-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       groupEl.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      // Map index to actual value for boost
       if (type === 'boost') {
-        const boostMap = [-2, -1, 0, 1, 2];
-        state[side].boost = boostMap[idx];
+        const val = parseInt(btn.dataset.val);
+        state[side].boost = val;
+        syncBoostSlider(side, val);
       } else {
-        state[side].evs = btn.dataset.val;
+        const evsVal = btn.dataset.val;
+        state[side].evs = evsVal;
+        // Sync sp + nature from preset key
+        const { sp, nature } = evsKeyToSpNature(evsVal);
+        state[side].sp = sp;
+        state[side].nature = nature;
+        syncSpSlider(side, sp);
+        syncNature(side, nature);
       }
       updateSpeed(side);
       renderTiers();
     });
+  });
+}
+
+function evsKeyToSpNature(key) {
+  if (key === "32+") return { sp: 32, nature: "+" };
+  if (key === "32")  return { sp: 32, nature: "=" };
+  if (key === "0")   return { sp: 0,  nature: "=" };
+  if (key === "0-")  return { sp: 0,  nature: "-" };
+  return { sp: 32, nature: "+" };
+}
+
+function syncBoostSlider(side, val) {
+  const slider = side === 'a' ? els.boostSliderA : els.boostSliderB;
+  const display = side === 'a' ? els.boostDisplayA : els.boostDisplayB;
+  slider.value = val;
+  display.textContent = val > 0 ? `+${val}` : `${val}`;
+}
+
+function syncSpSlider(side, sp) {
+  const slider = side === 'a' ? els.spSliderA : els.spSliderB;
+  const display = side === 'a' ? els.spDisplayA : els.spDisplayB;
+  slider.value = sp;
+  display.textContent = sp;
+}
+
+function syncNature(side, nature) {
+  const natureEl = side === 'a' ? els.natureA : els.natureB;
+  natureEl.querySelectorAll('.nature-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.val === nature);
+  });
+}
+
+// ─── Boost Slider Setup ──────────────────────────────
+function setupBoostSlider(sliderEl, side) {
+  sliderEl.addEventListener('input', () => {
+    const val = parseInt(sliderEl.value);
+    state[side].boost = val;
+    const display = side === 'a' ? els.boostDisplayA : els.boostDisplayB;
+    display.textContent = val > 0 ? `+${val}` : `${val}`;
+    // Sync presets: highlight matching button or clear all
+    const groupEl = side === 'a' ? els.boostA : els.boostB;
+    groupEl.querySelectorAll('.seg-btn').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.val) === val);
+    });
+    updateSpeed(side);
+    renderTiers();
+  });
+}
+
+// ─── SP Slider + Nature Setup ────────────────────────
+function setupSpSlider(sliderEl, side) {
+  sliderEl.addEventListener('input', () => {
+    const sp = parseInt(sliderEl.value);
+    state[side].sp = sp;
+    const display = side === 'a' ? els.spDisplayA : els.spDisplayB;
+    display.textContent = sp;
+    const evsKey = spNatureToEvsKey(sp, state[side].nature);
+    state[side].evs = evsKey;
+    syncEvsPreset(side, evsKey);
+    updateSpeed(side);
+    renderTiers();
+  });
+}
+
+function setupNature(natureEl, side) {
+  natureEl.querySelectorAll('.nature-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      natureEl.querySelectorAll('.nature-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state[side].nature = btn.dataset.val;
+      const evsKey = spNatureToEvsKey(state[side].sp, btn.dataset.val);
+      state[side].evs = evsKey;
+      syncEvsPreset(side, evsKey);
+      updateSpeed(side);
+      renderTiers();
+    });
+  });
+}
+
+function syncEvsPreset(side, evsKey) {
+  const groupEl = side === 'a' ? els.evsA : els.evsB;
+  groupEl.querySelectorAll('.seg-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.val === evsKey);
   });
 }
 
@@ -305,15 +416,27 @@ function renderTiers() {
       if (applyToA) {
         state.a.boost = boost;
         state.a.evs = evs;
+        const spnA = evsKeyToSpNature(evs);
+        state.a.sp = spnA.sp;
+        state.a.nature = spnA.nature;
         syncSegmented(els.boostA, boost, 'boost');
+        syncBoostSlider('a', boost);
         syncSegmented(els.evsA, evs, 'evs');
+        syncSpSlider('a', spnA.sp);
+        syncNature('a', spnA.nature);
         updateSpeed('a');
       }
       if (applyToB) {
         state.b.boost = boost;
         state.b.evs = evs;
+        const spnB = evsKeyToSpNature(evs);
+        state.b.sp = spnB.sp;
+        state.b.nature = spnB.nature;
         syncSegmented(els.boostB, boost, 'boost');
+        syncBoostSlider('b', boost);
         syncSegmented(els.evsB, evs, 'evs');
+        syncSpSlider('b', spnB.sp);
+        syncNature('b', spnB.nature);
         updateSpeed('b');
       }
       renderTiers();
@@ -325,11 +448,10 @@ function renderTiers() {
 }
 
 function syncSegmented(groupEl, value, type) {
-  groupEl.querySelectorAll('.seg-btn').forEach((btn, idx) => {
+  groupEl.querySelectorAll('.seg-btn').forEach(btn => {
     btn.classList.remove('active');
     if (type === 'boost') {
-      const boostMap = [-2, -1, 0, 1, 2];
-      if (boostMap[idx] === value) btn.classList.add('active');
+      if (parseInt(btn.dataset.val) === value) btn.classList.add('active');
     } else {
       if (btn.dataset.val === value) btn.classList.add('active');
     }
@@ -399,6 +521,12 @@ setupSegmented(els.boostA, 'a', 'boost');
 setupSegmented(els.boostB, 'b', 'boost');
 setupSegmented(els.evsA, 'a', 'evs');
 setupSegmented(els.evsB, 'b', 'evs');
+setupBoostSlider(els.boostSliderA, 'a');
+setupBoostSlider(els.boostSliderB, 'b');
+setupSpSlider(els.spSliderA, 'a');
+setupSpSlider(els.spSliderB, 'b');
+setupNature(els.natureA, 'a');
+setupNature(els.natureB, 'b');
 setupEffects(els.effectsA, 'a');
 setupEffects(els.effectsB, 'b');
 

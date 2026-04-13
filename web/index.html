@@ -61,21 +61,41 @@
             <div class="modifier-group">
               <label class="field-label">Mod (+/-)</label>
               <div class="segmented" id="boost-a">
-                <button class="seg-btn" data-val="-1">−2</button>
+                <button class="seg-btn" data-val="-2">−2</button>
                 <button class="seg-btn" data-val="-1">−1</button>
                 <button class="seg-btn active" data-val="0">0</button>
                 <button class="seg-btn" data-val="1">+1</button>
                 <button class="seg-btn" data-val="2">+2</button>
               </div>
+              <div class="slider-row">
+                <span class="slider-label-end">−6</span>
+                <input type="range" id="boost-slider-a" class="boost-slider" min="-6" max="6" step="1" value="0">
+                <span class="slider-label-end">+6</span>
+                <span class="slider-value-display" id="boost-display-a">0</span>
+              </div>
             </div>
 
             <div class="modifier-group">
-              <label class="field-label">EVs</label>
+              <label class="field-label">SP</label>
               <div class="segmented" id="evs-a">
                 <button class="seg-btn active" data-val="32+">32+</button>
                 <button class="seg-btn" data-val="32">32</button>
                 <button class="seg-btn" data-val="0">0</button>
                 <button class="seg-btn" data-val="0-">0−</button>
+              </div>
+              <div class="slider-row sp-slider-row">
+                <span class="slider-label-end">0</span>
+                <input type="range" id="sp-slider-a" class="sp-slider" min="0" max="32" step="1" value="32">
+                <span class="slider-label-end">32</span>
+                <span class="slider-value-display" id="sp-display-a">32</span>
+              </div>
+              <div class="nature-row" id="nature-a">
+                <span class="nature-label">Nature</span>
+                <div class="nature-btns">
+                  <button class="nature-btn" data-val="-">−</button>
+                  <button class="nature-btn" data-val="=">= </button>
+                  <button class="nature-btn active" data-val="+">+</button>
+                </div>
               </div>
             </div>
             <div class="modifier-group">
@@ -132,21 +152,41 @@
             <div class="modifier-group">
               <label class="field-label">Mod (+/-)</label>
               <div class="segmented" id="boost-b">
-                <button class="seg-btn" data-val="-1">−2</button>
+                <button class="seg-btn" data-val="-2">−2</button>
                 <button class="seg-btn" data-val="-1">−1</button>
                 <button class="seg-btn active" data-val="0">0</button>
                 <button class="seg-btn" data-val="1">+1</button>
                 <button class="seg-btn" data-val="2">+2</button>
               </div>
+              <div class="slider-row">
+                <span class="slider-label-end">−6</span>
+                <input type="range" id="boost-slider-b" class="boost-slider" min="-6" max="6" step="1" value="0">
+                <span class="slider-label-end">+6</span>
+                <span class="slider-value-display" id="boost-display-b">0</span>
+              </div>
             </div>
 
             <div class="modifier-group">
-              <label class="field-label">EVs</label>
+              <label class="field-label">SP</label>
               <div class="segmented" id="evs-b">
                 <button class="seg-btn active" data-val="32+">32+</button>
                 <button class="seg-btn" data-val="32">32</button>
                 <button class="seg-btn" data-val="0">0</button>
                 <button class="seg-btn" data-val="0-">0−</button>
+              </div>
+              <div class="slider-row sp-slider-row">
+                <span class="slider-label-end">0</span>
+                <input type="range" id="sp-slider-b" class="sp-slider" min="0" max="32" step="1" value="32">
+                <span class="slider-label-end">32</span>
+                <span class="slider-value-display" id="sp-display-b">32</span>
+              </div>
+              <div class="nature-row" id="nature-b">
+                <span class="nature-label">Naturaleza</span>
+                <div class="nature-btns">
+                  <button class="nature-btn" data-val="-">−</button>
+                  <button class="nature-btn" data-val="=">= </button>
+                  <button class="nature-btn active" data-val="+">+</button>
+                </div>
               </div>
             </div>
             <div class="modifier-group">
