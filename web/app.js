@@ -341,10 +341,10 @@ function setupEffects(groupEl, side) {
   groupEl.querySelectorAll('.effect-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const val = btn.dataset.val;
+      const wasActive = state[side].effects.has(val);
+
       if (val === 'trickroom') {
-        // Trick Room toggles globally (same state for both sides makes sense,
-        // but we store per-side so user can choose freely)
-        if (state[side].effects.has('trickroom')) {
+        if (wasActive) {
           state[side].effects.delete('trickroom');
           btn.classList.remove('active');
         } else {
@@ -352,17 +352,21 @@ function setupEffects(groupEl, side) {
           btn.classList.add('active');
         }
       } else {
-        // scarf and swift are mutually exclusive with each other
-        const wasActive = state[side].effects.has(val);
-        state[side].effects.delete('scarf');
-        state[side].effects.delete('swift');
-        groupEl.querySelectorAll('.effect-btn[data-val="scarf"], .effect-btn[data-val="swift"]')
-          .forEach(b => b.classList.remove('active'));
-        if (!wasActive) {
+        if (val === 'scarf' || val === 'swift') {
+          state[side].effects.delete('scarf');
+          state[side].effects.delete('swift');
+          groupEl.querySelectorAll('.effect-btn[data-val="scarf"], .effect-btn[data-val="swift"]')
+            .forEach(b => b.classList.remove('active'));
+        }
+        if (wasActive) {
+          state[side].effects.delete(val);
+          btn.classList.remove('active');
+        } else {
           state[side].effects.add(val);
           btn.classList.add('active');
         }
       }
+
       updateSpeed(side);
       renderTiers();
     });
