@@ -361,7 +361,6 @@ function setupEffects(groupEl, side) {
           }
         });
 
-        // 3. Actualizamos ambos lados y salimos de la función
         updateSpeed('a');
         updateSpeed('b');
         renderTiers();
