@@ -1,7 +1,7 @@
 // ─── State ───────────────────────────────────────────
 const state = {
-  a: { pokemon: null, boost: 0, evs: "32", effects: new Set() },
-  b: { pokemon: null, boost: 0, evs: "32", effects: new Set() },
+  a: { pokemon: null, boost: 0, evs: "32+", effects: new Set() },
+  b: { pokemon: null, boost: 0, evs: "32+", effects: new Set() },
 };
 
 // ─── DOM refs ────────────────────────────────────────
@@ -127,6 +127,8 @@ function applyEffects(baseSpeed, effects) {
   let spd = baseSpeed;
   if (effects.has('scarf')) spd = Math.floor(spd * 1.5);
   if (effects.has('swift')) spd = spd * 2;
+  if (effects.has('tailwind')) spd = spd * 2;
+  if (effects.has('paralysis')) spd = Math.floor(spd / 2);
   // trick room doesn't change the number, handled in comparison
   return spd;
 }
@@ -154,7 +156,7 @@ function updateSpeed(side) {
 
   if (effectiveSpeed !== null) {
     // Show effective speed; if modified show base too
-    const isModified = s.effects.has('scarf') || s.effects.has('swift');
+    const isModified = s.effects.has('scarf') || s.effects.has('swift') || s.effects.has('tailwind') || s.effects.has('paralysis');
     speedEl.innerHTML = effectiveSpeed +
       (isModified && baseSpeed !== effectiveSpeed
         ? `<span class="speed-base"> (base ${baseSpeed})</span>`
@@ -338,27 +340,13 @@ function setupEffects(groupEl, side) {
   groupEl.querySelectorAll('.effect-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const val = btn.dataset.val;
-      if (val === 'trickroom') {
-        // Trick Room toggles globally (same state for both sides makes sense,
-        // but we store per-side so user can choose freely)
-        if (state[side].effects.has('trickroom')) {
-          state[side].effects.delete('trickroom');
-          btn.classList.remove('active');
-        } else {
-          state[side].effects.add('trickroom');
-          btn.classList.add('active');
-        }
+      // All effects toggle independently
+      if (state[side].effects.has(val)) {
+        state[side].effects.delete(val);
+        btn.classList.remove('active');
       } else {
-        // scarf and swift are mutually exclusive with each other
-        const wasActive = state[side].effects.has(val);
-        state[side].effects.delete('scarf');
-        state[side].effects.delete('swift');
-        groupEl.querySelectorAll('.effect-btn[data-val="scarf"], .effect-btn[data-val="swift"]')
-          .forEach(b => b.classList.remove('active'));
-        if (!wasActive) {
-          state[side].effects.add(val);
-          btn.classList.add('active');
-        }
+        state[side].effects.add(val);
+        btn.classList.add('active');
       }
       updateSpeed(side);
       renderTiers();

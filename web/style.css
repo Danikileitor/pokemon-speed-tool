@@ -818,3 +818,30 @@ main {
     box-shadow: 0 0 28px rgba(255, 215, 64, 0.7);
   }
 }
+
+/* ─── Tailwind & Paralysis effect colours ───────────── */
+.effect-btn[data-val="tailwind"].active {
+  border-color: #4fc3f7;
+  background: rgba(79, 195, 247, 0.12);
+  color: #4fc3f7;
+  box-shadow: 0 0 10px rgba(79, 195, 247, 0.25);
+}
+
+.effect-btn[data-val="paralysis"].active {
+  border-color: #e8c030;
+  background: rgba(232, 192, 48, 0.12);
+  color: #e8c030;
+  box-shadow: 0 0 10px rgba(232, 192, 48, 0.25);
+}
+
+/* 5 buttons: wrap into 2 rows (3+2) */
+.effects-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.effects-grid .effect-btn {
+  flex: 1 1 calc(33% - 6px);
+  min-width: 80px;
+}
