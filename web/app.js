@@ -344,20 +344,40 @@ function setupEffects(groupEl, side) {
       const wasActive = state[side].effects.has(val);
 
       if (val === 'trickroom') {
-        if (wasActive) {
-          state[side].effects.delete('trickroom');
-          btn.classList.remove('active');
-        } else {
-          state[side].effects.add('trickroom');
+        const shouldActivate = !wasActive;
+
+        ['a', 'b'].forEach(s => {
+          if (shouldActivate) {
+            state[s].effects.add('trickroom');
+          } else {
+            state[s].effects.delete('trickroom');
+          }
+
+          const targetGroup = (s === 'a') ? els.effectsA : els.effectsB;
+          const targetBtn = targetGroup.querySelector('.effect-btn[data-val="trickroom"]');
+
+          if (targetBtn) {
+            targetBtn.classList.toggle('active', shouldActivate);
+          }
+        });
+
+        // 3. Actualizamos ambos lados y salimos de la función
+        updateSpeed('a');
+        updateSpeed('b');
+        renderTiers();
+        return;
+      }
+      else if (val === 'scarf' || val === 'ironball') {
+        state[side].effects.delete('scarf');
+        state[side].effects.delete('ironball');
+        groupEl.querySelectorAll('.effect-btn[data-val="scarf"], .effect-btn[data-val="ironball"]').forEach(b => b.classList.remove('active'));
+
+        if (!wasActive) {
+          state[side].effects.add(val);
           btn.classList.add('active');
         }
-      } else {
-        if (val === 'scarf' || val === 'swift') {
-          state[side].effects.delete('scarf');
-          state[side].effects.delete('swift');
-          groupEl.querySelectorAll('.effect-btn[data-val="scarf"], .effect-btn[data-val="swift"]')
-            .forEach(b => b.classList.remove('active'));
-        }
+      }
+      else {
         if (wasActive) {
           state[side].effects.delete(val);
           btn.classList.remove('active');
