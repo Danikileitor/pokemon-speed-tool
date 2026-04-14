@@ -897,7 +897,7 @@ main {
 }
 
 #afd-toggle {
-  position: fixed;
+  position: absolute;
   top: 16px;
   right: 20px;
   z-index: 1000;
