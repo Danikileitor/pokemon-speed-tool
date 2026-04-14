@@ -374,8 +374,8 @@ function renderTiers() {
   const hasB = !!state.b.pokemon;
 
   if (!hasA && !hasB) {
-    els.tiersGrid.innerHTML = '<div class="tiers-empty">Selecciona un Pokémon para ver sus niveles de velocidad disponibles</div>';
-    els.tiersHint.textContent = 'Selecciona un Pokémon para ver sus tiers';
+    els.tiersGrid.innerHTML = '<div class="tiers-empty">Select a Pokémon to view its available speed levels</div>';
+    els.tiersHint.textContent = 'Select a Pokémon to view its speed tiers';
     return;
   }
 
