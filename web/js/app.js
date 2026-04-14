@@ -565,6 +565,196 @@ setupNature(els.natureB, 'b');
 setupEffects(els.effectsA, 'a');
 setupEffects(els.effectsB, 'b');
 
+// ─── Swap Pokémon A ↔ B ─────────────────────────────
+function swapPokemon() {
+  // Swap state
+  const tmpPokemon = state.a.pokemon;
+  const tmpBoost = state.a.boost;
+  const tmpEvs = state.a.evs;
+  const tmpSp = state.a.sp;
+  const tmpNature = state.a.nature;
+  const tmpEffects = new Set(state.a.effects);
+
+  state.a.pokemon = state.b.pokemon;
+  state.a.boost = state.b.boost;
+  state.a.evs = state.b.evs;
+  state.a.sp = state.b.sp;
+  state.a.nature = state.b.nature;
+  state.a.effects = new Set(state.b.effects);
+
+  state.b.pokemon = tmpPokemon;
+  state.b.boost = tmpBoost;
+  state.b.evs = tmpEvs;
+  state.b.sp = tmpSp;
+  state.b.nature = tmpNature;
+  state.b.effects = tmpEffects;
+
+  // Re-render both sides
+  ['a', 'b'].forEach(side => {
+    const s = state[side];
+    const iconEl = side === 'a' ? els.iconA : els.iconB;
+    const nameEl = side === 'a' ? els.nameA : els.nameB;
+    const typesEl = document.getElementById('types-' + side);
+
+    if (s.pokemon) {
+      const spriteUrl = getSpriteUrl(s.pokemon);
+      const fallbackUrl = getSpriteFallbackUrl(s.pokemon);
+      iconEl.innerHTML = `<img src="${spriteUrl}" alt="${s.pokemon}"
+        onerror="this.onerror=null; this.src='${fallbackUrl}'; this.onerror=function(){this.parentElement.innerHTML='<div class=\poke-placeholder\>${s.pokemon[0].toUpperCase()}</div>';};">`;
+      nameEl.textContent = s.pokemon;
+      if (typesEl) typesEl.innerHTML = renderTypeBadges(s.pokemon);
+    } else {
+      iconEl.innerHTML = '<div class="poke-placeholder">?</div>';
+      nameEl.textContent = '—';
+      if (typesEl) typesEl.innerHTML = '';
+    }
+
+    // Sync all controls
+    syncSegmented(side === 'a' ? els.boostA : els.boostB, s.boost, 'boost');
+    syncBoostSlider(side, s.boost);
+    syncSegmented(side === 'a' ? els.evsA : els.evsB, s.evs, 'evs');
+    syncSpSlider(side, s.sp);
+    syncNature(side, s.nature);
+
+    // Sync effect buttons
+    const effectsEl = side === 'a' ? els.effectsA : els.effectsB;
+    effectsEl.querySelectorAll('.effect-btn').forEach(btn => {
+      btn.classList.toggle('active', s.effects.has(btn.dataset.val));
+    });
+
+    updateSpeed(side);
+  });
+
+  renderTiers();
+
+  // Brief animation on the badge
+  els.vsBadge.classList.add('swap-flash');
+  setTimeout(() => els.vsBadge.classList.remove('swap-flash'), 300);
+}
+
+els.vsBadge.style.cursor = 'pointer';
+els.vsBadge.title = 'Swap Pokémon A ↔ B';
+els.vsBadge.addEventListener('click', swapPokemon);
+
+// ─── Type Effectiveness Popup ────────────────────────
+const TYPE_CHART = {
+  normal: { weak: ['fighting'], resist: ['ghost'], immune: ['ghost'] },
+  fire: { weak: ['water', 'ground', 'rock'], resist: ['fire', 'grass', 'ice', 'bug', 'steel', 'fairy'], immune: [] },
+  water: { weak: ['electric', 'grass'], resist: ['fire', 'water', 'ice', 'steel'], immune: [] },
+  electric: { weak: ['ground'], resist: ['electric', 'flying', 'steel'], immune: ['ground'] },
+  grass: { weak: ['fire', 'ice', 'poison', 'flying', 'bug'], resist: ['water', 'electric', 'grass', 'ground'], immune: [] },
+  ice: { weak: ['fire', 'fighting', 'rock', 'steel'], resist: ['ice'], immune: [] },
+  fighting: { weak: ['flying', 'psychic', 'fairy'], resist: ['bug', 'rock', 'dark'], immune: [] },
+  poison: { weak: ['ground', 'psychic'], resist: ['grass', 'fighting', 'poison', 'bug', 'fairy'], immune: [] },
+  ground: { weak: ['water', 'grass', 'ice'], resist: ['poison', 'rock'], immune: ['electric'] },
+  flying: { weak: ['electric', 'ice', 'rock'], resist: ['grass', 'fighting', 'bug'], immune: ['ground'] },
+  psychic: { weak: ['bug', 'ghost', 'dark'], resist: ['fighting', 'psychic'], immune: ['dark'] },
+  bug: { weak: ['fire', 'flying', 'rock'], resist: ['grass', 'fighting', 'ground'], immune: [] },
+  rock: { weak: ['water', 'grass', 'fighting', 'ground', 'steel'], resist: ['normal', 'fire', 'poison', 'flying'], immune: [] },
+  ghost: { weak: ['ghost', 'dark'], resist: ['poison', 'bug'], immune: ['normal', 'fighting'] },
+  dragon: { weak: ['ice', 'dragon', 'fairy'], resist: ['fire', 'water', 'electric', 'grass'], immune: ['fairy'] },
+  dark: { weak: ['fighting', 'bug', 'fairy'], resist: ['ghost', 'dark'], immune: ['psychic'] },
+  steel: { weak: ['fire', 'fighting', 'ground'], resist: ['normal', 'grass', 'ice', 'flying', 'psychic', 'bug', 'rock', 'dragon', 'steel', 'fairy'], immune: ['poison'] },
+  fairy: { weak: ['poison', 'steel'], resist: ['fighting', 'bug', 'dark'], immune: ['dragon'] },
+};
+
+function calcTypeEffectiveness(types) {
+  const allTypes = Object.keys(TYPE_CHART);
+  const result = {};
+
+  allTypes.forEach(attacker => {
+    let mult = 1;
+    types.forEach(defender => {
+      const chart = TYPE_CHART[defender];
+      if (chart.immune.includes(attacker)) mult *= 0;
+      else if (chart.weak.includes(attacker)) mult *= 2;
+      else if (chart.resist.includes(attacker)) mult *= 0.5;
+    });
+    if (mult !== 1) result[attacker] = mult;
+  });
+
+  return result;
+}
+
+function buildPopupHTML(name) {
+  const types = POKEMON_TYPES[name] || [];
+  const eff = calcTypeEffectiveness(types);
+
+  const groups = { 4: [], 2: [], 0.5: [], 0.25: [], 0: [] };
+  Object.entries(eff).forEach(([t, m]) => {
+    if (groups[m]) groups[m].push(t);
+  });
+
+  const badge = t => `<span class="popup-type-badge type-badge type-${t}">${t}</span>`;
+
+  const row = (label, mult, cls, list) => list.length
+    ? `<div class="popup-row ${cls}">
+        <span class="popup-mult">${label}</span>
+        <div class="popup-types">${list.map(badge).join('')}</div>
+       </div>`
+    : '';
+
+  return `
+    <div class="type-popup-inner">
+      <div class="popup-header">
+        <span class="popup-name">${name}</span>
+        <div class="popup-own-types">${types.map(badge).join('')}</div>
+        <button class="popup-close" aria-label="Close">✕</button>
+      </div>
+      <div class="popup-title">Type Effectiveness</div>
+      ${row('4×', 4, 'super-weak', groups[4])}
+      ${row('2×', 2, 'weak', groups[2])}
+      ${row('½×', 0.5, 'resist', groups[0.5])}
+      ${row('¼×', 0.25, 'super-resist', groups[0.25])}
+      ${row('0×', 0, 'immune', groups[0])}
+    </div>`;
+}
+
+function showTypePopup(name, anchorEl) {
+  // Remove any existing popup
+  const existing = document.getElementById('type-popup');
+  if (existing) existing.remove();
+  if (!name) return;
+
+  const popup = document.createElement('div');
+  popup.id = 'type-popup';
+  popup.className = 'type-popup';
+  popup.innerHTML = buildPopupHTML(name);
+  document.body.appendChild(popup);
+
+  // Position near anchor
+  const rect = anchorEl.getBoundingClientRect();
+  const scrollY = window.scrollY || window.pageYOffset;
+  const scrollX = window.scrollX || window.pageXOffset;
+
+  let top = rect.bottom + scrollY + 8;
+  let left = rect.left + scrollX + rect.width / 2 - 160;
+  left = Math.max(8, Math.min(left, window.innerWidth - 328));
+  popup.style.top = top + 'px';
+  popup.style.left = left + 'px';
+
+  // Close button
+  popup.querySelector('.popup-close').addEventListener('click', () => popup.remove());
+
+  // Click outside to close
+  setTimeout(() => {
+    document.addEventListener('click', function handler(e) {
+      if (!popup.contains(e.target) && !anchorEl.contains(e.target)) {
+        popup.remove();
+        document.removeEventListener('click', handler);
+      }
+    });
+  }, 0);
+}
+
+// Attach click to icon wrappers
+els.iconA.addEventListener('click', () => {
+  if (state.a.pokemon) showTypePopup(state.a.pokemon, els.iconA);
+});
+els.iconB.addEventListener('click', () => {
+  if (state.b.pokemon) showTypePopup(state.b.pokemon, els.iconB);
+});
+
 // ─── April Fools Easter Egg ──────────────────────────
 (function () {
   const btn = document.getElementById('afd-toggle');

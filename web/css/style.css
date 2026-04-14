@@ -998,3 +998,135 @@ main {
   flex: 1 1 calc(33% - 6px);
   min-width: 80px;
 }
+
+/* ─── VS Badge Swap ─────────────────────────────────── */
+.vs-badge {
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+  user-select: none;
+}
+.vs-badge:hover {
+  transform: scale(1.15);
+  filter: brightness(1.3);
+}
+.vs-badge.swap-flash {
+  animation: swapFlash 0.3s ease;
+}
+@keyframes swapFlash {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.35) rotate(180deg); }
+  100% { transform: scale(1); }
+}
+
+/* ─── Pokémon icon — clickable cursor ───────────────── */
+.poke-icon-wrap {
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+.poke-icon-wrap:hover {
+  filter: brightness(1.2) drop-shadow(0 0 8px var(--accent));
+  transform: scale(1.08);
+}
+
+/* ─── Type Popup ────────────────────────────────────── */
+.type-popup {
+  position: absolute;
+  z-index: 9999;
+  width: 320px;
+  background: var(--surface);
+  border: 1px solid var(--border-glow);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(0,229,255,0.08);
+  padding: 0;
+  overflow: hidden;
+  animation: popupIn 0.18s ease;
+}
+@keyframes popupIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.type-popup-inner {
+  padding: 14px 16px 16px;
+}
+.popup-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.popup-name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.popup-own-types {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.popup-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: background 0.15s, color 0.15s;
+  margin-left: auto;
+}
+.popup-close:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+}
+.popup-title {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+.popup-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+.popup-mult {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  min-width: 28px;
+  text-align: right;
+}
+.popup-row.super-weak .popup-mult { color: #ff1744; }
+.popup-row.weak .popup-mult        { color: var(--red); }
+.popup-row.resist .popup-mult      { color: var(--green); }
+.popup-row.super-resist .popup-mult{ color: #00e676; }
+.popup-row.immune .popup-mult      { color: var(--accent); }
+.popup-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.popup-type-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.03em;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
