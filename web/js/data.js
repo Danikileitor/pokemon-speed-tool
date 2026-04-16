@@ -262,7 +262,6 @@ const SPEED_DATA = [
   { spe: 230, boost: 2, evs: "0-", pokemon: ["Infernape"] },
   { spe: 229, boost: 1, evs: "32", pokemon: ["Dedenne", "Mega Glimmora", "Pidgeot", "Simipour", "Simisage", "Simisear"] },
   { spe: 229, boost: 1, evs: "0-", pokemon: ["Mega Aerodactyl", "Mega Alakazam"] },
-  //  { spe: 228, boost: 2, evs: "32+", pokemon: ["Floette"] },
   { spe: 228, boost: 2, evs: "0", pokemon: ["Tinkaton"] },
   { spe: 228, boost: 1, evs: "32", pokemon: ["Charizard", "Mega Charizard X", "Mega Charizard Y", "Mega Dragonite", "Mega Gardevoir", "Mega Glalie", "Mega Kangaskhan", "Mega Medicham", "Ninetales", "Palafin", "Paldean Tauros-Combat", "Paldean Tauros-Aqua", "Paldean Tauros-Blaze", "Typhlosion", "Volcarona"] },
   { spe: 226, boost: 2, evs: "32", pokemon: ["Tyranitar"] },
@@ -326,7 +325,6 @@ const SPEED_DATA = [
   { spe: 210, boost: 1, evs: "32", pokemon: ["Excadrill"] },
   { spe: 210, boost: 1, evs: "0", pokemon: ["Alakazam", "Mega Froslass", "Mega Starmie", "Sneasler"] },
   { spe: 208, boost: 2, evs: "32+", pokemon: ["Crabominable", "Runerigus"] },
-  //  { spe: 208, boost: 2, evs: "32", pokemon: ["Floette"] },
   { spe: 208, boost: 2, evs: "0", pokemon: ["Gourgeist"] },
   { spe: 208, boost: 2, evs: "0-", pokemon: ["Mimikyu"] },
   { spe: 208, boost: 1, evs: "32+", pokemon: ["Absol", "Armarouge", "Florges", "Garbodor", "Klefki", "Mega Banette", "Mega Emboar", "Mega Heracross", "Mega Scizor", "Mega Scovillain", "Scovillain"] },
@@ -487,7 +485,6 @@ const SPEED_DATA = [
   { spe: 172, boost: 1, evs: "0-", pokemon: ["Infernape"] },
   { spe: 172, boost: 0, evs: "32+", pokemon: ["Espathra", "Lopunny", "Manectric", "Mega Pinsir", "Mega Sharpedo", "Zoroark"] },
   { spe: 172, boost: 0, evs: "32", pokemon: ["Alakazam", "Mega Froslass", "Mega Starmie", "Sneasler"] },
-  //  { spe: 171, boost: 1, evs: "32+", pokemon: ["Floette"] },
   { spe: 171, boost: 1, evs: "0", pokemon: ["Tinkaton"] },
   { spe: 171, boost: 0, evs: "32+", pokemon: ["Delphox", "Meowstic"] },
   { spe: 170, boost: 2, evs: "32", pokemon: ["Mega Crabominable"] },
@@ -562,7 +559,6 @@ const SPEED_DATA = [
   { spe: 156, boost: 2, evs: "0", pokemon: ["Aurorus", "Pangoro", "Rampardos"] },
   { spe: 156, boost: 2, evs: "0-", pokemon: ["Corviknight"] },
   { spe: 156, boost: 1, evs: "32+", pokemon: ["Crabominable", "Runerigus"] },
-  //  { spe: 156, boost: 1, evs: "32", pokemon: ["Floette"] },
   { spe: 156, boost: 1, evs: "0", pokemon: ["Gourgeist"] },
   { spe: 156, boost: 1, evs: "0-", pokemon: ["Mimikyu"] },
   { spe: 156, boost: 0, evs: "32+", pokemon: ["Hisuian Arcanine", "Kangaskhan", "Lucario", "Mega Chandelure", "Pikachu", "Roserade"] },
@@ -620,7 +616,6 @@ const SPEED_DATA = [
   { spe: 145, boost: 0, evs: "0", pokemon: ["Weavile"] },
   { spe: 145, boost: 0, evs: "0-", pokemon: ["Dragapult", "Mega Greninja"] },
   { spe: 144, boost: 2, evs: "32", pokemon: ["Mega Camerupt", "Mega Sableye", "Torkoal"] },
-  //  { spe: 144, boost: 2, evs: "0", pokemon: ["Floette"] },
   { spe: 144, boost: 2, evs: "0-", pokemon: ["Abomasnow", "Aegislash", "Arbok", "Clefable", "Empoleon", "Farigiraf", "Hisuian Decidueye", "Hisuian Goodra", "Incineroar", "Primarina", "Sylveon", "Toucannon", "Tyranitar"] },
   { spe: 144, boost: 1, evs: "32+", pokemon: ["Drampa", "Mega Drampa"] },
   { spe: 144, boost: 1, evs: "32", pokemon: ["Clawitzer", "Hydrapple", "Mega Chesnaught"] },
@@ -704,7 +699,6 @@ const SPEED_DATA = [
   { spe: 129, boost: 0, evs: "0", pokemon: ["Alolan Ninetales", "Heliolisk"] },
   { spe: 129, boost: 0, evs: "0-", pokemon: ["Mega Meowstic"] },
   { spe: 128, boost: 2, evs: "0", pokemon: ["Clawitzer", "Hydrapple", "Mega Chesnaught"] },
-  //  { spe: 128, boost: 2, evs: "0-", pokemon: ["Floette"] },
   { spe: 128, boost: 0, evs: "32+", pokemon: ["Banette", "Chimecho", "Emboar", "Flareon", "Glaceon", "Mega Chimecho", "Orthworm", "Pelipper", "Scizor", "Umbreon", "Vaporeon"] },
   { spe: 128, boost: 0, evs: "0", pokemon: ["Infernape"] },
   { spe: 128, boost: 0, evs: "0-", pokemon: ["Meowscarada", "Noivern"] },
@@ -778,7 +772,6 @@ const SPEED_DATA = [
   { spe: 114, boost: 2, evs: "0-", pokemon: ["Clawitzer", "Hydrapple", "Mega Chesnaught"] },
   { spe: 114, boost: 1, evs: "0", pokemon: ["Torterra", "Trevenant"] },
   { spe: 114, boost: 1, evs: "0-", pokemon: ["Banette", "Chimecho", "Emboar", "Flareon", "Glaceon", "Mega Chimecho", "Orthworm", "Pelipper", "Scizor", "Umbreon", "Vaporeon"] },
-  //  { spe: 114, boost: 0, evs: "32+", pokemon: ["Floette"] },
   { spe: 114, boost: 0, evs: "0", pokemon: ["Tinkaton"] },
   { spe: 113, boost: 0, evs: "32", pokemon: ["Tyranitar"] },
   { spe: 113, boost: 0, evs: "0-", pokemon: ["Liepard"] },
@@ -804,7 +797,6 @@ const SPEED_DATA = [
   { spe: 109, boost: 0, evs: "0-", pokemon: ["Furfrou", "Garchomp", "Mega Floette"] },
   { spe: 108, boost: 2, evs: "0-", pokemon: ["Ariados", "Camerupt", "Forretress", "Rhyperior"] },
   { spe: 108, boost: 1, evs: "32", pokemon: ["Mega Camerupt", "Mega Sableye", "Torkoal"] },
-  //  { spe: 108, boost: 1, evs: "0", pokemon: ["Floette"] },
   { spe: 108, boost: 1, evs: "0-", pokemon: ["Abomasnow", "Aegislash", "Arbok", "Clefable", "Empoleon", "Farigiraf", "Hisuian Decidueye", "Hisuian Goodra", "Incineroar", "Primarina", "Sylveon", "Toucannon", "Tyranitar"] },
   { spe: 108, boost: 0, evs: "32+", pokemon: ["Hippowdon"] },
   { spe: 108, boost: 0, evs: "32", pokemon: ["Torterra", "Trevenant"] },
@@ -825,7 +817,6 @@ const SPEED_DATA = [
   { spe: 104, boost: 2, evs: "0", pokemon: ["Appletun", "Galarian Stunfisk", "Stunfisk"] },
   { spe: 104, boost: 2, evs: "0-", pokemon: ["Hisuian Avalugg"] },
   { spe: 104, boost: 0, evs: "32+", pokemon: ["Crabominable", "Runerigus"] },
-  //  { spe: 104, boost: 0, evs: "32", pokemon: ["Floette"] },
   { spe: 104, boost: 0, evs: "0", pokemon: ["Gourgeist"] },
   { spe: 104, boost: 0, evs: "0-", pokemon: ["Mimikyu"] },
   { spe: 103, boost: 0, evs: "32+", pokemon: ["Araquanid", "Oranguru"] },
@@ -859,7 +850,6 @@ const SPEED_DATA = [
   { spe: 97, boost: 0, evs: "0-", pokemon: ["Excadrill"] },
   { spe: 96, boost: 2, evs: "0", pokemon: ["Avalugg"] },
   { spe: 96, boost: 1, evs: "0", pokemon: ["Clawitzer", "Hydrapple", "Mega Chesnaught"] },
-  //  { spe: 96, boost: 1, evs: "0-", pokemon: ["Floette"] },
   { spe: 96, boost: 0, evs: "32+", pokemon: ["Drampa", "Mega Drampa"] },
   { spe: 96, boost: 0, evs: "32", pokemon: ["Clawitzer", "Hydrapple", "Mega Chesnaught"] },
   { spe: 95, boost: 0, evs: "32+", pokemon: ["Garganacl", "Mudsdale", "Spiritomb", "Toxapex"] },
@@ -943,7 +933,6 @@ const SPEED_DATA = [
   { spe: 72, boost: 2, evs: "0-", pokemon: ["Mega Camerupt", "Mega Sableye", "Torkoal"] },
   { spe: 72, boost: 1, evs: "0", pokemon: ["Avalugg"] },
   { spe: 72, boost: 0, evs: "32", pokemon: ["Mega Camerupt", "Mega Sableye", "Torkoal"] },
-  //  { spe: 72, boost: 0, evs: "0", pokemon: ["Floette"] },
   { spe: 72, boost: 0, evs: "0-", pokemon: ["Abomasnow", "Aegislash", "Arbok", "Clefable", "Empoleon", "Farigiraf", "Hisuian Decidueye", "Hisuian Goodra", "Incineroar", "Primarina", "Sylveon", "Toucannon", "Tyranitar"] },
   { spe: 70, boost: 1, evs: "0-", pokemon: ["Mega Crabominable"] },
   { spe: 70, boost: 0, evs: "0", pokemon: ["Aggron", "Audino", "Azumarill", "Beartic", "Kingambit", "Mega Aggron", "Mega Audino", "Sableye", "Sinistcha"] },
@@ -959,7 +948,6 @@ const SPEED_DATA = [
   { spe: 65, boost: 0, evs: "0", pokemon: ["Bellibolt", "Conkeldurr", "Mega Ampharos"] },
   { spe: 64, boost: 1, evs: "0-", pokemon: ["Avalugg"] },
   { spe: 64, boost: 0, evs: "0", pokemon: ["Clawitzer", "Hydrapple", "Mega Chesnaught"] },
-  //  { spe: 64, boost: 0, evs: "0-", pokemon: ["Floette"] },
   { spe: 63, boost: 0, evs: "0", pokemon: ["Crabominable", "Runerigus"] },
   { spe: 63, boost: 0, evs: "0-", pokemon: ["Aggron", "Audino", "Azumarill", "Beartic", "Kingambit", "Mega Aggron", "Mega Audino", "Sableye", "Sinistcha"] },
   { spe: 62, boost: 0, evs: "0", pokemon: ["Araquanid", "Oranguru"] },
@@ -1090,6 +1078,21 @@ function getSpriteUrl(name) {
       'vivillon-monsoon', 'vivillon-ocean', 'vivillon-pokeball', 'vivillon-polar', 'vivillon-river', 'vivillon-sandstorm',
       'vivillon-savanna', 'vivillon-sun', 'vivillon-tundra', 'vivillon'
     ];
+    const randomForm = forms[Math.floor(Math.random() * forms.length)];
+    return baseUrl + randomForm + ext;
+  }
+
+  // 2.4 Florges:
+  if (n === 'Florges') {
+    const forms = ['florges-blue', 'florges-orange', 'florges-white', 'florges-yellow', 'florges'];
+    const randomForm = forms[Math.floor(Math.random() * forms.length)];
+    return baseUrl + randomForm + ext;
+  }
+
+  // 2.5 Furfrou:
+  if (n === 'Furfrou') {
+    const forms = ['furfrou-dandy', 'furfrou-debutante', 'furfrou-diamond', 'furfrou-heart', 'furfrou-kabuki',
+      'furfrou-lareine', 'furfrou-matron', 'furfrou-pharaoh', 'furfrou-star', 'furfrou'];
     const randomForm = forms[Math.floor(Math.random() * forms.length)];
     return baseUrl + randomForm + ext;
   }
