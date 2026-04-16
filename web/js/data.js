@@ -1012,7 +1012,7 @@ function getSpriteUrl(name) {
   const baseUrl = isAFD ? 'https://play.pokemonshowdown.com/sprites/afd/' : 'https://play.pokemonshowdown.com/sprites/ani/';
   const ext = isAFD ? '.png' : '.gif';
 
-  // 2. Caso especiales:
+  // 2. Casos especiales:
   // 2.1 Paldean Tauros:
   if (n.startsWith('Paldean Tauros')) {
     let form = '';
@@ -1025,8 +1025,6 @@ function getSpriteUrl(name) {
         break;
       case 'Paldean Tauros-Blaze':
         form = 'tauros-paldeablaze'
-        break;
-      default:
         break;
     }
     return baseUrl + form + ext;
