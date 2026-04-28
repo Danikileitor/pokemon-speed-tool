@@ -179,6 +179,35 @@ main {
   border-bottom: 1px solid var(--border);
   background: var(--bg2);
   border-radius: 12px 12px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.shiny-toggle {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 2px 6px;
+  margin-left: auto;
+  opacity: 0.45;
+  transition: opacity 0.2s, border-color 0.2s, background 0.2s;
+  letter-spacing: 0;
+}
+
+.shiny-toggle:hover {
+  opacity: 0.9;
+  border-color: var(--border);
+}
+
+.shiny-toggle.shiny-active {
+  opacity: 1;
+  background: rgba(255, 220, 80, 0.15);
+  border-color: rgba(255, 220, 80, 0.5);
+  filter: drop-shadow(0 0 6px rgba(255, 220, 80, 0.6));
 }
 
 .panel-content {

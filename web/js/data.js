@@ -1001,15 +1001,26 @@ function getSpeed(name, boost, evs) {
 
 // April Fools mode flag (toggled by easter egg button)
 let AFD_MODE = false;
+let SHINY_MODE = { a: false, b: false };
 
 // Pokemon sprite URL (Pokémon Showdown sprites)
 // Falls back from /sprites/ani/ (animated) to /sprites/dex/ (static) via onerror in HTML
-function getSpriteUrl(name) {
+function getSpriteUrl(name, side) {
   const n = name.trim();
 
   // 1. Definimos la configuración global de la URL según el modo
   const isAFD = typeof AFD_MODE !== 'undefined' && AFD_MODE;
-  const baseUrl = isAFD ? 'https://play.pokemonshowdown.com/sprites/afd/' : 'https://play.pokemonshowdown.com/sprites/ani/';
+  const isShiny = side && typeof SHINY_MODE !== 'undefined' && SHINY_MODE[side];
+  let baseUrl;
+  if (isAFD && isShiny) {
+    baseUrl = 'https://play.pokemonshowdown.com/sprites/afd-shiny/';
+  } else if (isAFD) {
+    baseUrl = 'https://play.pokemonshowdown.com/sprites/afd/';
+  } else if (isShiny) {
+    baseUrl = 'https://play.pokemonshowdown.com/sprites/ani-shiny/';
+  } else {
+    baseUrl = 'https://play.pokemonshowdown.com/sprites/ani/';
+  }
   const ext = isAFD ? '.png' : '.gif';
 
   // 2. Casos especiales:
@@ -1133,9 +1144,11 @@ function getSpriteUrl(name) {
 
 // Static fallback sprite (broader coverage for custom Megas)
 // In AFD mode the primary is already a PNG, fallback to /dex/ as usual
-function getSpriteFallbackUrl(name) {
-  if (AFD_MODE) return getSpriteUrl(name); // afd is already the best we have
-  return getSpriteUrl(name).replace('/sprites/ani/', '/sprites/dex/').replace('.gif', '.png');
+function getSpriteFallbackUrl(name, side) {
+  const isShiny = side && typeof SHINY_MODE !== 'undefined' && SHINY_MODE[side];
+  if (AFD_MODE) return getSpriteUrl(name, side);
+  if (isShiny) return getSpriteUrl(name, side).replace('/sprites/ani-shiny/', '/sprites/dex-shiny/').replace('.gif', '.png');
+  return getSpriteUrl(name, side).replace('/sprites/ani/', '/sprites/dex/').replace('.gif', '.png');
 }
 
 

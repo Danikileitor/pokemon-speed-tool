@@ -114,8 +114,8 @@ function setupSearch(inputEl, dropdownEl, side) {
 function renderDropdown(dropdownEl, matches, side) {
   if (!matches.length) { dropdownEl.classList.remove('open'); return; }
   dropdownEl.innerHTML = matches.map(name => {
-    const animUrl = getSpriteUrl(name);
-    const staticUrl = getSpriteFallbackUrl(name);
+    const animUrl = getSpriteUrl(name, side);
+    const staticUrl = getSpriteFallbackUrl(name, side);
     return `<div class="dropdown-item" data-name="${name}">
       <img src="${animUrl}" onerror="this.onerror=null;this.src='${staticUrl}';this.onerror=function(){this.style.display='none';}" alt="">
       ${name}
@@ -143,8 +143,8 @@ function selectPokemon(name, side) {
   const iconEl = side === 'a' ? els.iconA : els.iconB;
   const nameEl = side === 'a' ? els.nameA : els.nameB;
   const typesEl = side === 'a' ? document.getElementById('types-a') : document.getElementById('types-b');
-  const spriteUrl = getSpriteUrl(name);
-  const fallbackUrl = getSpriteFallbackUrl(name);
+  const spriteUrl = getSpriteUrl(name, side);
+  const fallbackUrl = getSpriteFallbackUrl(name, side);
 
   iconEl.innerHTML = `<img src="${spriteUrl}" alt="${name}"
     onerror="this.onerror=null; this.src='${fallbackUrl}'; this.onerror=function(){this.parentElement.innerHTML='<div class=\poke-placeholder\>${name[0].toUpperCase()}</div>';};"
@@ -597,8 +597,8 @@ function swapPokemon() {
     const typesEl = document.getElementById('types-' + side);
 
     if (s.pokemon) {
-      const spriteUrl = getSpriteUrl(s.pokemon);
-      const fallbackUrl = getSpriteFallbackUrl(s.pokemon);
+      const spriteUrl = getSpriteUrl(s.pokemon, side);
+      const fallbackUrl = getSpriteFallbackUrl(s.pokemon, side);
       iconEl.innerHTML = `<img src="${spriteUrl}" alt="${s.pokemon}"
         onerror="this.onerror=null; this.src='${fallbackUrl}'; this.onerror=function(){this.parentElement.innerHTML='<div class=\poke-placeholder\>${s.pokemon[0].toUpperCase()}</div>';};">`;
       nameEl.textContent = s.pokemon;
@@ -766,8 +766,8 @@ els.iconB.addEventListener('click', () => {
       if (!name) return;
 
       const iconEl = document.getElementById('icon-' + side);
-      const animUrl = getSpriteUrl(name);
-      const fallbackUrl = getSpriteFallbackUrl(name);
+      const animUrl = getSpriteUrl(name, side);
+      const fallbackUrl = getSpriteFallbackUrl(name, side);
       const initial = name[0].toUpperCase();
 
       iconEl.innerHTML = `
@@ -803,5 +803,40 @@ els.iconB.addEventListener('click', () => {
     btn.classList.toggle('afd-active', AFD_MODE);
     btn.title = AFD_MODE ? 'Easter egg active' : 'Easter egg';
     refreshAllSprites();
+  });
+})();
+// ─── Shiny Mode ──────────────────────────────────────
+(function () {
+  ['a', 'b'].forEach(side => {
+    const btn = document.getElementById('shiny-toggle-' + side);
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      SHINY_MODE[side] = !SHINY_MODE[side];
+      btn.classList.toggle('shiny-active', SHINY_MODE[side]);
+      btn.title = SHINY_MODE[side] ? 'Shiny mode active' : 'Toggle shiny';
+
+      // Refresh sprite for this panel
+      const name = state[side].pokemon;
+      if (name) {
+        const iconEl = document.getElementById('icon-' + side);
+        const animUrl = getSpriteUrl(name, side);
+        const fallbackUrl = getSpriteFallbackUrl(name, side);
+        const initial = name[0].toUpperCase();
+        iconEl.innerHTML = `<img src="${animUrl}" alt="${name}"
+          onerror="this.onerror=null; this.src='${fallbackUrl}'; this.onerror=function(){this.parentElement.innerHTML='<div class=&quot;poke-placeholder&quot;>${initial}</div>';};">`;
+      }
+
+      // Refresh open dropdown for this panel
+      const ddEl = document.getElementById('dropdown-' + side);
+      const searchEl = document.getElementById('search-' + side);
+      if (ddEl && ddEl.classList.contains('open')) {
+        const q = searchEl.value.trim().toLowerCase();
+        if (q) {
+          const matches = ALL_POKEMON.filter(p => p.toLowerCase().includes(q)).slice(0, 30);
+          renderDropdown(ddEl, matches, side);
+        }
+      }
+    });
   });
 })();
