@@ -575,6 +575,15 @@ function swapPokemon() {
   const tmpNature = state.a.nature;
   const tmpEffects = new Set(state.a.effects);
 
+  // Swap shiny mode
+  const tmpShiny = SHINY_MODE.a;
+  SHINY_MODE.a = SHINY_MODE.b;
+  SHINY_MODE.b = tmpShiny;
+  const shinyBtnA = document.getElementById('shiny-toggle-a');
+  const shinyBtnB = document.getElementById('shiny-toggle-b');
+  if (shinyBtnA) { shinyBtnA.classList.toggle('shiny-active', SHINY_MODE.a); shinyBtnA.title = SHINY_MODE.a ? 'Shiny mode active' : 'Toggle shiny'; }
+  if (shinyBtnB) { shinyBtnB.classList.toggle('shiny-active', SHINY_MODE.b); shinyBtnB.title = SHINY_MODE.b ? 'Shiny mode active' : 'Toggle shiny'; }
+
   state.a.pokemon = state.b.pokemon;
   state.a.boost = state.b.boost;
   state.a.evs = state.b.evs;
